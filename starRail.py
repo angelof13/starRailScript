@@ -1,6 +1,7 @@
 import configuration as cfg
-from configuration import time, pa, random, bigMap, bigMapRegionStart, bigMapRegionNum, getStarTrain
+from configuration import time, pa, bigMap, bigMapRegionStart, bigMapRegionNum, getStarTrain
 from pathFinding import selectRegion
+import random
 
 # 选择大地图
 # MapN: 大地图的序列 黑塔:0, 雅利洛:1, 仙舟:2 
@@ -56,7 +57,7 @@ if __name__ == '__main__':
         print("Not Found Game Window")
         exit()
     print(cfg.bC)
-    #pa.screenshot("data/fightEnd.png",region=(35+cfg.bC[0],113+cfg.bC[1],35,20)) #截取左上角手机底部图案，以便确认是否结束战斗
+    pa.screenshot("data/fightEnd.png",region=(34+cfg.bC[0],112+cfg.bC[1],35,20)) #截取左上角手机底部图案，以便确认是否结束战斗
     print("Start Script")
     script()
     print("End Script")
