@@ -8,6 +8,7 @@ import win32gui as w32
 baseCoordinate=[0,0,0,0]
 bC = baseCoordinate
 
+#坐标都是相对坐标，基于窗口最左上角
 # 大地图的点击坐标
 bigMap=([350,600], # 黑塔空间站
         [1000,300], # 雅利洛-Ⅵ

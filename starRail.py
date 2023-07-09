@@ -35,9 +35,7 @@ def clickRegion(bigMapN:int,regionN:int):
     #进行区域战斗逻辑
     selectRegion(bigMapN,regionN)
     
-
-# 脚本开始
-# 需要选择人物为 娜塔莎 ，并且在非基座舱段的其他场地，并且在可操作界面
+#操作开始
 def script():
     time.sleep(0.1)
     pa.press('m') # 打开地图
@@ -51,6 +49,9 @@ def script():
             print("regionNum=",j)
             clickRegion(i,j) # 选择区域
 
+
+# 脚本开始
+# 需要选择人物为 娜塔莎 ，并且在非基座舱段的其他场地，并且在可操作界面
 if __name__ == '__main__':
     print("Select Window")
     if 0 == getStarTrain():
