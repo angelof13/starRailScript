@@ -15,9 +15,13 @@
 
 ***
 安装所需的几个模块，-i后面为pip国内镜像源
+
 <code>pip install pyautogui -i https://pypi.tuna.tsinghua.edu.cn/simple</code>
+
 <code>pip install pydirectinput -i https://pypi.tuna.tsinghua.edu.cn/simple</code>
+
 <code>pip install pywin32 -i https://pypi.tuna.tsinghua.edu.cn/simple</code>
+
 <code>pip install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple</code>
 ***
 设置星穹铁道为**1920*1080窗口化**，带队人物选择**娜塔莎**，角色置于**非基座舱段**的其他位置，**保持在可操作界面，脚本运行期间，队伍战斗不能失败**
