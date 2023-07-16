@@ -4,11 +4,18 @@ import time
 import win32con
 import win32gui as w32
 
-#窗口的坐标
+# 窗口的坐标
 baseCoordinate=[0,0,0,0]
 bC = baseCoordinate
 
-#坐标都是相对坐标，基于窗口最左上角
+# 模拟宇宙
+# 世界几:1-6
+cosmicNum=6
+# [存护/0，记忆/1，虚无/2，丰饶/3，寻猎/4，毁灭/5，欢愉/6]
+preference=4
+
+#大地图
+# 坐标都是相对坐标，基于窗口最左上角
 # 大地图的点击坐标
 bigMap=([350,600], # 黑塔空间站
         [1000,300], # 雅利洛-Ⅵ
@@ -101,7 +108,11 @@ def action(actionSequence: tuple):
             #一圈大概7720
             pdi.moveRel(xOffset=0, yOffset=actionI[1], relative=True)
         elif actionI[0] == 'c' or actionI[0] == 'C': #左键，平A
-            pa.click()
+            aIL = len(actionI)
+            if aIL == 1:
+                pa.click()
+            else:
+                pa.click(x=actionI[1][0]+bC[0],y=actionI[1][1]+bC[1])
             time.sleep(1)
         elif actionI[0] == 'cf' or actionI[0] == 'CF': #检测战斗是否结束
             aIL = len(actionI)
@@ -109,7 +120,11 @@ def action(actionSequence: tuple):
                 checkFightEnd()
             else:
                 checkFightEnd(actionI[1])
-        elif actionI[0] == 'f' or actionI[0] == 'F': #按F，当前版本，仅有进入画卷这一操作需要
+        elif actionI[0] == 'f' or actionI[0] == 'F': #按F，进入画卷，模拟宇宙对话
+            time.sleep(1)
+            pa.press(actionI[0])
+            time.sleep(actionI[1])
+        elif actionI[0] == 'm' or actionI[0] == 'M': #打开地图
             time.sleep(1)
             pa.press(actionI[0])
             time.sleep(actionI[1])
@@ -120,6 +135,4 @@ def action(actionSequence: tuple):
             else:
                 _run(actionI[0], actionI[1], True)
 
-    time.sleep(1)
-    pa.press('m')
     time.sleep(1)

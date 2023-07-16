@@ -33,16 +33,14 @@ def clickRegion(bigMapN:int,regionN:int):
     elif bigMapN == 2:
         pa.click(x=bigMapRegionStart[0][0]+cfg.bC[0],y=bigMapRegionStart[0][1]+cfg.bC[1]+(regionN+1)*100)
     time.sleep(1)
-    #进行区域战斗逻辑
-    selectRegion(bigMapN,regionN)
     
 #操作开始
-def script(mode:int):
+def script(mode:int,times:int=34):
     time.sleep(0.1)
     pa.press('m') # 打开地图
     time.sleep(1)
     sub=pa.locateOnScreen("data/sub.png", region=(600 + cfg.bC[0], 990+cfg.bC[1], 200, 200), confidence=0.9)
-    pa.click(sub,clicks=10,interval=0.3) # 点击缩放地图，保证传送点的位置正确
+    pa.click(sub,clicks=6,interval=0.3) # 点击缩放地图，保证传送点的位置正确
     if mode == 1:
         for i in range(0,3): # 三个大体图
             print("bigMapNum=",i)
@@ -50,13 +48,21 @@ def script(mode:int):
             for j in range(0,bigMapRegionNum[i]): # 大地图中的区域选择 
                 print("regionNum=",j)
                 clickRegion(i,j) # 选择区域
+                selectRegion(i,j) #进行区域战斗逻辑
     elif mode == 2:
-        clickBigMap(0)
-        linkStart()
-
+        clickBigMap(0) # 黑塔空间站
+        clickRegion(0,-1) # 主控舱段
+        pa.click(x=450+cfg.bC[0],y=935+cfg.bC[1]) # 黑塔办公室坐标
+        time.sleep(1)
+        pa.click(x=900+cfg.bC[0],y=795+cfg.bC[1]) # 选择黑塔办公室
+        time.sleep(1)
+        pa.click(x=1650+cfg.bC[0],y=1000+cfg.bC[1]) # 点击传送
+        time.sleep(cfg.loadingTime)
+        linkStart(times)
 
 # 脚本开始
 # 需要选择人物为 娜塔莎 ，并且在非基座舱段的其他场地，并且在可操作界面
+# 模拟宇宙仅需在可操作界面
 if __name__ == '__main__':
     print("Select Window")
     if 0 == getStarTrain():
@@ -65,5 +71,5 @@ if __name__ == '__main__':
     print(cfg.bC)
     pa.screenshot("data/fightEnd.png",region=(34+cfg.bC[0],112+cfg.bC[1],35,20)) #截取左上角手机底部图案，以便确认是否结束战斗
     print("Start Script")
-    script(2)
+    script(mode=1,times=2)
     print("End Script")
