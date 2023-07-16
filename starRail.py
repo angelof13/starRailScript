@@ -1,6 +1,7 @@
 import configuration as cfg
 from configuration import time, pa, bigMap, bigMapRegionStart, bigMapRegionNum, getStarTrain
 from pathFinding import selectRegion
+from cosmic import linkStart
 import random
 
 # 选择大地图
@@ -36,18 +37,22 @@ def clickRegion(bigMapN:int,regionN:int):
     selectRegion(bigMapN,regionN)
     
 #操作开始
-def script():
+def script(mode:int):
     time.sleep(0.1)
     pa.press('m') # 打开地图
     time.sleep(1)
     sub=pa.locateOnScreen("data/sub.png", region=(600 + cfg.bC[0], 990+cfg.bC[1], 200, 200), confidence=0.9)
     pa.click(sub,clicks=10,interval=0.3) # 点击缩放地图，保证传送点的位置正确
-    for i in range(0,3): # 三个大体图
-        print("bigMapNum=",i)
-        clickBigMap(i) # 点击大地图
-        for j in range(0,bigMapRegionNum[i]): # 大地图中的区域选择 
-            print("regionNum=",j)
-            clickRegion(i,j) # 选择区域
+    if mode == 1:
+        for i in range(0,3): # 三个大体图
+            print("bigMapNum=",i)
+            clickBigMap(i) # 点击大地图
+            for j in range(0,bigMapRegionNum[i]): # 大地图中的区域选择 
+                print("regionNum=",j)
+                clickRegion(i,j) # 选择区域
+    elif mode == 2:
+        clickBigMap(0)
+        linkStart()
 
 
 # 脚本开始
@@ -60,5 +65,5 @@ if __name__ == '__main__':
     print(cfg.bC)
     pa.screenshot("data/fightEnd.png",region=(34+cfg.bC[0],112+cfg.bC[1],35,20)) #截取左上角手机底部图案，以便确认是否结束战斗
     print("Start Script")
-    script()
+    script(2)
     print("End Script")

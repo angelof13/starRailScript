@@ -22,7 +22,7 @@ bigMapRegionStart=([1520,465],[1520,585])
 bigMapRegionNum=(3,9,4)
 
 # 加载等待时间，即点击传送后到角色进入地图的等待时间
-loadingTime = 6
+loadingTime = 8
 
 # 区域内的传送点坐标
 regionPoint=(
@@ -74,3 +74,52 @@ def checkFightEnd(interval:int=2):
         if None != pa.locateOnScreen("data/fightEnd.png",region=(34+bC[0],112+bC[1],35,20),confidence=0.8):
             print("fight end")
             return 1
+
+# 行动
+# key:      行动按键; 
+# sec:      行动时长; 
+# walkFlag: 是否走路，默认False，既奔跑状态
+def _run(key, sec: float, walkFlag:bool = False):
+    time.sleep(0.1)
+    for keyI in key:
+        pa.keyDown(keyI)
+    if walkFlag == False:
+        pa.click(button='right')
+    time.sleep(sec)
+    for keyI in key:
+        pa.keyUp(keyI)
+
+# 地图内操作解析
+# actionSequence: 需要执行的一系列行动的序列
+def action(actionSequence: tuple):
+    print(actionSequence)
+    for actionI in actionSequence:
+        print(actionI)
+        if actionI[0] == 'x' or actionI[0] == 'X': #移动横向视角，一圈大概7720，非精准操纵，慎用，负数为向左转，正数为向右转
+            pdi.moveRel(xOffset=actionI[1], yOffset=0, relative=True)
+        elif actionI[0] == 'y' or actionI[0] == 'Y': #移动纵向视角，非精准操纵，慎用，甚至感觉没用(ˉ▽ˉ；)...
+            #一圈大概7720
+            pdi.moveRel(xOffset=0, yOffset=actionI[1], relative=True)
+        elif actionI[0] == 'c' or actionI[0] == 'C': #左键，平A
+            pa.click()
+            time.sleep(1)
+        elif actionI[0] == 'cf' or actionI[0] == 'CF': #检测战斗是否结束
+            aIL = len(actionI)
+            if aIL == 1:
+                checkFightEnd()
+            else:
+                checkFightEnd(actionI[1])
+        elif actionI[0] == 'f' or actionI[0] == 'F': #按F，当前版本，仅有进入画卷这一操作需要
+            time.sleep(1)
+            pa.press(actionI[0])
+            time.sleep(actionI[1])
+        else: #其他按键操作，基本为'w''a''s''d'的组合，默认奔跑，需要走路时，在操作列表增加一位，例如['s',3,1]
+            aIL = len(actionI)
+            if aIL == 2:
+                _run(actionI[0], actionI[1])
+            else:
+                _run(actionI[0], actionI[1], True)
+
+    time.sleep(1)
+    pa.press('m')
+    time.sleep(1)
