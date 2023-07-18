@@ -1,5 +1,7 @@
 from configuration import time, pa, action, getStarTrain
 import configuration as cfg
+import cv2
+import numpy as np
 
 # 进入模拟宇宙
 # first：是否是第一次进入
@@ -31,6 +33,7 @@ def intoCosmicSimulator(first:bool=True):
 def selectBlessing():
     blessing="data/cosmic/blessing"+str(cfg.preference)+".png"
     for check in (0,2):
+        time.sleep(3)
         sub=pa.locateAllOnScreen(blessing, region=(500 + cfg.bC[0], 773+cfg.bC[1], 1400, 19), confidence=0.8)
         temp = list(sub)
         tempL=len(temp)
@@ -68,7 +71,7 @@ def cosmicSimulatorAction():
         aSequence = buildAction()
         if aSequence == -1:
             break
-        action(aSequence)
+        #action(aSequence)
     return 0
 
 
@@ -79,8 +82,75 @@ def linkStart(times:int=34):
 
 #该文件的main函数为区域内Debug使用
 if __name__ == '__main__':
-    if 0 == getStarTrain():
-        print("Not found game Window")
-        exit()
-    linkStart(times=1)
-    #pa.screenshot("data/cosmic/blessing2.png",region=(533+cfg.bC[0],773+cfg.bC[1],56,19)) # 533 941 1349
+    def getpos(event,x,y,flags,param):
+        if event == cv2.EVENT_LBUTTONDOWN and param == 1:
+            print(map_HSV[y,x])
+        elif event == cv2.EVENT_LBUTTONDOWN and param == 2:
+            print(map_gray[y,x])
+    #if 0 == getStarTrain():
+    #    print("Not found game Window")
+    #    exit()
+    #linkStart(times=1)
+
+
+    #temp = pa.screenshot("data/cosmic/temp.png",region=(56+cfg.bC[0],96+cfg.bC[1],187,187)) # 533 941 1349
+    temp = cv2.imread("data/cosmic/temp.png",cv2.IMREAD_COLOR)
+    mask = np.zeros((187,187),dtype=np.uint8)
+    cv2.circle(mask, (94,94),93,(255,255,255),-1)
+    map_image = cv2.copyTo(temp,mask)
+    map_image[np.where(mask == 0)] = (255,255,255) #扣出地图，对地图外填充白色
+    cv2.imshow("map",map_image)
+
+    #寻找角色图形，识别角色朝向
+    angle=0
+    map_HSV = cv2.cvtColor(map_image,cv2.COLOR_RGB2HSV)
+    lower_user_color = np.array([20,200,240])
+    upper_user_color = np.array([30,255,255])
+    user_image = cv2.inRange(map_HSV, lower_user_color,upper_user_color)
+    cv2.imshow("mapHSV",map_HSV)
+    cv2.setMouseCallback("mapHSV",getpos,1)
+    cv2.imshow("use",user_image)
+    # 轮廓检测，找到图像中的轮廓
+    contours, _ = cv2.findContours(user_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # 获取三角形的朝向角度
+    for contour in contours:
+        # 计算最小外接矩形
+        rect = cv2.minAreaRect(contour)
+        # 获取矩形的旋转角度
+        angle = int(rect[-1])
+        # 打印角度
+    print("angle:", angle)
+
+
+    #寻找活动区域
+    map_gray = cv2.cvtColor(map_image,cv2.COLOR_RGB2GRAY)
+    cv2.imshow("gray",map_gray)
+    cv2.setMouseCallback("gray",getpos,2)
+    activeArea1 = cv2.inRange(map_gray,50,70) # 黑色
+    activeArea2 = cv2.inRange(map_gray,155,165) # 桥，浅色
+    activeArea3 = cv2.inRange(map_gray,170,190) # 角色视野扫过桥，更浅色
+    kernel = np.ones((3, 3), np.uint8)  # 定义操作的核大小
+    user_temp = cv2.dilate(user_image, kernel, iterations=7) # 进行角色像素的膨胀操作，便于路径寻找
+    cv2.imshow("ke",user_temp)
+    activeArea = cv2.bitwise_or(user_temp,cv2.bitwise_or(activeArea3,cv2.bitwise_or(activeArea1,activeArea2)))
+
+    # 使用连通区域分析找到白色块
+    _, labels, stats, _ = cv2.connectedComponentsWithStats(activeArea)
+    # 设置阈值，保留大于特定值的白色块
+    threshold_area = 700  # 设置特定值为1000像素
+    activeArea = np.zeros_like(activeArea)
+    for label, stat in enumerate(stats[1:], start=1):
+        if stat[4] > threshold_area:
+            activeArea[labels == label] = 255
+    cv2.imshow("active1",activeArea)
+    
+    activeArea = cv2.morphologyEx(activeArea, cv2.MORPH_CLOSE, kernel,iterations=3) #收缩
+
+    activeArea = cv2.cvtColor(activeArea,cv2.COLOR_GRAY2BGR)
+    cv2.circle(activeArea,(94,94),92,(0,0,255),1)
+    cv2.imshow("active",activeArea)
+
+
+
+    cv2.waitKey(20000)
+    cv2.destroyAllWindows()
