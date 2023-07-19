@@ -24,16 +24,16 @@ def clickRegion(bigMapN:int,regionN:int):
     time.sleep(2)
     if bigMapN == 0:
         pa.click(x=bigMapRegionStart[0][0]+cfg.bC[0],y=bigMapRegionStart[0][1]+cfg.bC[1]+regionN*100)
-    elif bigMapN == 1:
+    else:
         if regionN < 4:
             pa.click(x=bigMapRegionStart[0][0]+cfg.bC[0],y=bigMapRegionStart[0][1]+cfg.bC[1]+regionN*100)
         else:
-            pa.click(x=bigMapRegionStart[1][0]+cfg.bC[0],y=bigMapRegionStart[1][1]+cfg.bC[1]+(regionN-4)*100)
-    elif bigMapN == 2:
-        pa.click(x=bigMapRegionStart[0][0]+cfg.bC[0],y=bigMapRegionStart[0][1]+cfg.bC[1]+(regionN+1)*100)
+            if bigMapN == 1:
+                pa.click(x=bigMapRegionStart[1][0]+cfg.bC[0],y=bigMapRegionStart[1][1]+cfg.bC[1]+(regionN-4)*100)
+            elif bigMapN == 2:
+                pa.click(x=bigMapRegionStart[2][0]+cfg.bC[0],y=bigMapRegionStart[2][1]+cfg.bC[1]+(regionN-4)*100)
     time.sleep(1)
-    #进行区域战斗逻辑
-    selectRegion(bigMapN,regionN)
+
     
 #操作开始
 def script():
@@ -48,6 +48,7 @@ def script():
         for j in range(0,bigMapRegionNum[i]): # 大地图中的区域选择 
             print("regionNum=",j)
             clickRegion(i,j) # 选择区域
+            selectRegion(i,j) # 进行区域战斗逻辑
 
 
 # 脚本开始
