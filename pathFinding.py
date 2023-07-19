@@ -32,7 +32,8 @@ def _clickRegion(bigMapN:int,regionN:int,transportN:int=-1,option:int=0):
 # 以下为地图内操作逻辑
 # 黑塔空间站
 # rN: 哪一个地区 
-def _region0(rN: int):
+# node: 方便DeBug，有多个节点时，测试第几个节点
+def _region0(rN: int, node:int=0):
     if rN == 0: # 基座舱段
         _clickRegion(0,rN) #该区域仅需一个传送点
         if DEBUG == 1:
@@ -40,7 +41,7 @@ def _region0(rN: int):
         aSequence = (['s',3], ['c'], ['CF'], ['s',1], ['c'], ['s',2.8], ['c'],['a',0.2], ['c'], ['a',2.3], ['s',2], ['c'],['m',1])
         action(aSequence)
     elif rN == 1: # 收容舱段
-        for rNN in range (0,3): # 扫荡该区域需要用到3个传送点
+        for rNN in range (node,3): # 扫荡该区域需要用到3个传送点
             _clickRegion(0,rN,rNN)
             if DEBUG == 1:
                 return 1
@@ -55,7 +56,7 @@ def _region0(rN: int):
             if DEBUG == 2:
                 return 1
     elif rN == 2: # 支援舱段
-         for rNN in range (0,2):
+         for rNN in range (node,2):
             if rNN == 0:
                 _clickRegion(0,rN,rNN,1)
             else:
@@ -73,7 +74,8 @@ def _region0(rN: int):
 
 # 雅利洛-Ⅵ
 # rN: 哪一个地区
-def _region1(rN: int):
+# node: 方便DeBug，有多个节点时，测试第几个节点
+def _region1(rN: int, node:int=0):
     if rN == 0: # 城郊雪原
         _clickRegion(1,rN)
         if DEBUG == 1:
@@ -90,7 +92,7 @@ def _region1(rN: int):
     elif rN == 2: # 禁卫铁区
         return 1
     elif rN == 3: # 残响回廊
-        for rNN in range (0,4):
+        for rNN in range (node,4):
             _clickRegion(1,rN,rNN)
             if DEBUG == 1:
                 return 1
@@ -107,7 +109,7 @@ def _region1(rN: int):
             if DEBUG == 2:
                 return 1
     elif rN == 4: # 永冬岭
-        for rNN in range (0,2):
+        for rNN in range (node,2):
             if rNN == 0:
                 _clickRegion(1,rN,rNN,1)
             else:
@@ -124,7 +126,7 @@ def _region1(rN: int):
     elif rN == 5: # 磐岩镇
         return 1
     elif rN == 6: # 大矿区
-        for rNN in range (0,4):
+        for rNN in range (node,4):
             if rNN == 2:
                 _clickRegion(1,rN,rNN,1)
             else:
@@ -143,7 +145,7 @@ def _region1(rN: int):
             if DEBUG == 2:
                 return 1
     elif rN == 7: # 铆钉镇
-        for rNN in range (0,2):
+        for rNN in range (node,2):
             _clickRegion(1,rN,rNN)
             if DEBUG == 1:
                 return 1
@@ -164,9 +166,10 @@ def _region1(rN: int):
 
 # 仙舟⌜罗浮⌟
 # rN: 哪一个地区
-def _region2(rN: int):
+# node: 方便DeBug，有多个节点时，测试第几个节点
+def _region2(rN: int, node:int=0):
     if rN == 0: # 流云渡
-        for rNN in range (0,4):
+        for rNN in range (node,4):
             _clickRegion(2,rN,rNN)
             if DEBUG == 1:
                 return 1
@@ -182,7 +185,7 @@ def _region2(rN: int):
             if DEBUG == 2:
                 return 1
     elif rN == 1: # 迴星港
-        for rNN in range (0,3):
+        for rNN in range (node,3):
             if rNN == 0:
                 _clickRegion(2,rN,rNN,1)
             else:
@@ -198,12 +201,14 @@ def _region2(rN: int):
                 aSequence = (['a',0.4],['w',0.8],['d',1.6],['w',1],['c'],['CF'],['w',2.7],['a',2.5],['s',2],['a',1],['c'],['CF'],['s',0.4],['a',0.5],['c'],['CF'],
                              ['w',0.3],['d',1],['s',2],['a',3],['w',0.5],['a',2.5],['c'],['CF'],['w',0.5],['a',2.5],['c'],['CF'],
                              ['w',3.3],['a',1],['s',0.01],['c'],['CF'],['d',1.2],['s',2.5],['a',2],['s',0.1],['c'],
-                             ['s',6.8],['d',2],['c'],['CF'],['c'],['m',1])
+                             ['s',4.8],['d',0.5],['s',2],['d',2],['c'],['CF'],['c'],['m',1])
             action(aSequence)
             if DEBUG == 2:
                 return 1
-    elif rN == 2: # 太卜司
-        for rNN in range (0,3):
+    elif rN == 2: # 长乐天
+        return 1
+    elif rN == 3: # 太卜司
+        for rNN in range (node,3):
             _clickRegion(2,rN,rNN)
             if DEBUG == 1:
                 return 1
@@ -218,8 +223,8 @@ def _region2(rN: int):
             action(aSequence)
             if DEBUG == 2:
                 return 1
-    elif rN == 3: # 工造司
-        for rNN in range (0,4):
+    elif rN == 4: # 工造司
+        for rNN in range (node,4):
             _clickRegion(2,rN,rNN)
             if DEBUG == 1:
                 return 1
@@ -234,25 +239,53 @@ def _region2(rN: int):
             action(aSequence)
             if DEBUG == 2:
                 return 1
+    elif rN == 5: # 丹鼎司
+        for rNN in range (node,6):
+            _clickRegion(2,rN,rNN)
+            if DEBUG == 1:
+                return 1
+            if rNN == 0:
+                aSequence = (['w', 3],['d', 0.3],['w',0.3],['dw',1],['w',1],['d',0.5],['w',1],['d',1.7],['c'],['CF'],['d',1.1],['c'],['CF'], #['c'],['CF'],['d',1],['c'],['CF'],
+                             ['wd',3],['sd',2.4],['c'],['CF'],['c'],['c'],['CF'],
+                             ['as',3],['a',1.5],['as',1.5],['s',2.5],['d',0.5],['c'],['CF'],['m',1])
+            elif rNN == 1:
+                aSequence = (['w',4.5],['d',2.4],['s',2.4],['d',2.4],['c'],['CF'],['m',1])
+            elif rNN == 2:
+                aSequence = (['d',0.2],['w',6.2],['aw',3.2],['d',0.2],['s',4],['a',1],['w',1.5],['c'],['CF'],['m',1])
+            elif rNN == 3:
+                aSequence = (['d',0.2],['w',6.2],['aw',3.2],['w',6.2],['a',4],['w',6],['wa',1],['as',1],['c'],['CF'],['m',1])
+            elif rNN == 4:
+                aSequence = (['as', 5],['s', 1.5],['as',3.5],['sd',2.5],['wd',0.3],['d',1.5],['ds',1],['c'],['CF'],['c'],['CF'],['ds',1],['w',3],['dw',1.5],['w',2],['d',6],['c'],['CF'],['s',0.2],['c'],['CF'],['s',1.5],['a',0.5],['c'],['CF'],['m',1])
+            elif rNN == 5:
+                aSequence = (['s',3.3],['sa',1],['c'],['c'],['CF'],['sa',5],['c'],['CF'],['m',1])
+            action(aSequence)
+            if DEBUG == 2:
+                return 1
+    elif rN == 6: # 鳞渊境
+        for rNN in range (node,3):
+            
+            if DEBUG == 2:
+                return 1
 
 # bigMapN: 大地图的序列 黑塔:0, 雅利洛:1, 仙舟:2 
 # regionN: 地图内地区序列，从0开始，但不是游戏内的第一个区域，而是第一个有怪的区域，如bigMapN=0,regionN=0，既为黑塔空间站的基座舱段 
-def selectRegion(bigMapN: int, regionN: int):
+# _node: 方便DeBug，有多个节点时，测试第几个节点
+def selectRegion(bigMapN: int, regionN: int, _node:int=0):
     if 0 == bigMapN:
-        _region0(regionN)
+        _region0(regionN, _node)
     elif 1 == bigMapN:
-        _region1(regionN)
+        _region1(regionN, _node)
     elif 2 == bigMapN:
-        _region2(regionN)
+        _region2(regionN, _node)
 
 #该文件的main函数为区域内Debug使用
 if __name__ == '__main__':
     # 0：非DEBUG,将会执行完当前小地图
     # 1：区域内的传送点点击,若测试区域内多个传送点时，需要将人物送到上一行动的最终位置
     # 2：是区域内一个传送点的行动DEBUG，不会执行地图点击及操作结束后打开地图
-    DEBUG=0
+    DEBUG=2
     if 0 == getStarTrain():
         print("Not found game Window")
         exit()
     #0开始
-    selectRegion(2, 2) # Debug哪个区域直接在这里修改
+    selectRegion(2, 5, 5) # Debug哪个区域直接在这里修改

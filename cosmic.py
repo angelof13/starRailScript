@@ -143,14 +143,26 @@ if __name__ == '__main__':
         if stat[4] > threshold_area:
             activeArea[labels == label] = 255
     cv2.imshow("active1",activeArea)
-    
     activeArea = cv2.morphologyEx(activeArea, cv2.MORPH_CLOSE, kernel,iterations=3) #收缩
 
     activeArea = cv2.cvtColor(activeArea,cv2.COLOR_GRAY2BGR)
     cv2.circle(activeArea,(94,94),92,(0,0,255),1)
     cv2.imshow("active",activeArea)
 
+    # 加载图像
+    image = np.array(activeArea)
 
+    # 最大池化
+    max_pooled = cv2.resize(image, None, fx=0.2, fy=0.2, interpolation=cv2.INTER_NEAREST)
+
+    # 平均池化
+    avg_pooled = cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_NEAREST)
+
+
+    # 显示原始图像和池化后的图像
+    cv2.imshow("Original Image", image)
+    cv2.imshow("Max Pooled Image", max_pooled)
+    cv2.imshow("Average Pooled Image", avg_pooled)
 
     cv2.waitKey(20000)
     cv2.destroyAllWindows()

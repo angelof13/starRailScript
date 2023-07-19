@@ -25,13 +25,14 @@ def clickRegion(bigMapN:int,regionN:int):
     time.sleep(2)
     if bigMapN == 0:
         pa.click(x=bigMapRegionStart[0][0]+cfg.bC[0],y=bigMapRegionStart[0][1]+cfg.bC[1]+regionN*100)
-    elif bigMapN == 1:
+    else:
         if regionN < 4:
             pa.click(x=bigMapRegionStart[0][0]+cfg.bC[0],y=bigMapRegionStart[0][1]+cfg.bC[1]+regionN*100)
         else:
-            pa.click(x=bigMapRegionStart[1][0]+cfg.bC[0],y=bigMapRegionStart[1][1]+cfg.bC[1]+(regionN-4)*100)
-    elif bigMapN == 2:
-        pa.click(x=bigMapRegionStart[0][0]+cfg.bC[0],y=bigMapRegionStart[0][1]+cfg.bC[1]+(regionN+1)*100)
+            if bigMapN == 1:
+                pa.click(x=bigMapRegionStart[1][0]+cfg.bC[0],y=bigMapRegionStart[1][1]+cfg.bC[1]+(regionN-4)*100)
+            elif bigMapN == 2:
+                pa.click(x=bigMapRegionStart[2][0]+cfg.bC[0],y=bigMapRegionStart[2][1]+cfg.bC[1]+(regionN-4)*100)
     time.sleep(1)
     
 #操作开始
