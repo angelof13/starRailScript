@@ -59,7 +59,7 @@ def script(mode:int,times:int=34):
         pa.click(x=900+cfg.bC[0],y=795+cfg.bC[1]) # 选择黑塔办公室
         time.sleep(1)
         pa.click(x=1650+cfg.bC[0],y=1000+cfg.bC[1]) # 点击传送
-        time.sleep(cfg.loadingTime)
+        time.sleep(cfg._variableParameters['loadingTime'])
         linkStart(times)
 
 # 脚本开始
