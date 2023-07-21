@@ -1,5 +1,5 @@
 import configuration as cfg
-from configuration import time, pa, bigMap, bigMapRegionStart, bigMapRegionNum, getStarTrain
+from configuration import time, pa
 from pathFinding import selectRegion
 from cosmic import linkStart
 import random
@@ -8,9 +8,9 @@ import random
 # MapN: 大地图的序列 黑塔:0, 雅利洛:1, 仙舟:2 
 def clickBigMap(mapN:int):
     time.sleep(2)
-    pa.click(x=1600+cfg.bC[0],y=180+cfg.bC[1])
+    pa.click(x=cfg.nMC['interstellarChart'][0]+cfg.bC[0],y=cfg.nMC['interstellarChart'][1]+cfg.bC[1])
     time.sleep(2)
-    pa.moveTo(x=bigMap[mapN][0]+cfg.bC[0],y=bigMap[mapN][1]+cfg.bC[1])
+    pa.moveTo(x=cfg.bigMap[mapN][0]+cfg.bC[0],y=cfg.bigMap[mapN][1]+cfg.bC[1])
     time.sleep(1)
     for i in range(7):  
         time.sleep((random.randint(1,11)/10))
@@ -24,29 +24,30 @@ def clickBigMap(mapN:int):
 def clickRegion(bigMapN:int,regionN:int):
     time.sleep(2)
     if bigMapN == 0:
-        pa.click(x=bigMapRegionStart[0][0]+cfg.bC[0],y=bigMapRegionStart[0][1]+cfg.bC[1]+regionN*100)
+        pa.click(x=cfg.bigMapRegionStart[0][0]+cfg.bC[0],y=cfg.bigMapRegionStart[0][1]+cfg.bC[1]+regionN*cfg.nMC['gap'])
     else:
         if regionN < 4:
-            pa.click(x=bigMapRegionStart[0][0]+cfg.bC[0],y=bigMapRegionStart[0][1]+cfg.bC[1]+regionN*100)
+            pa.click(x=cfg.bigMapRegionStart[0][0]+cfg.bC[0],y=cfg.bigMapRegionStart[0][1]+cfg.bC[1]+regionN*cfg.nMC['gap'])
         else:
             if bigMapN == 1:
-                pa.click(x=bigMapRegionStart[1][0]+cfg.bC[0],y=bigMapRegionStart[1][1]+cfg.bC[1]+(regionN-4)*100)
+                pa.click(x=cfg.bigMapRegionStart[1][0]+cfg.bC[0],y=cfg.bigMapRegionStart[1][1]+cfg.bC[1]+(regionN-4)*cfg.nMC['gap'])
             elif bigMapN == 2:
-                pa.click(x=bigMapRegionStart[2][0]+cfg.bC[0],y=bigMapRegionStart[2][1]+cfg.bC[1]+(regionN-4)*100)
+                pa.click(x=cfg.bigMapRegionStart[2][0]+cfg.bC[0],y=cfg.bigMapRegionStart[2][1]+cfg.bC[1]+(regionN-4)*cfg.nMC['gap'])
     time.sleep(1)
+
     
 #操作开始
 def script(mode:int,times:int=34):
     time.sleep(0.1)
     pa.press('m') # 打开地图
     time.sleep(1)
-    sub=pa.locateOnScreen("data/sub.png", region=(600 + cfg.bC[0], 990+cfg.bC[1], 200, 200), confidence=0.9)
-    pa.click(sub,clicks=6,interval=0.3) # 点击缩放地图，保证传送点的位置正确
+    pa.click(cfg.nMC['subSign'][0]+cfg.bC[0],cfg.nMC['subSign'][1]+cfg.bC[1],clicks=10,interval=0.3) # 点击缩放地图，保证传送点的位置正确
+    time.sleep(1)
     if mode == 1:
         for i in range(0,3): # 三个大体图
             print("bigMapNum=",i)
             clickBigMap(i) # 点击大地图
-            for j in range(0,bigMapRegionNum[i]): # 大地图中的区域选择 
+            for j in range(0,cfg.bigMapRegionNum[i]): # 大地图中的区域选择 
                 print("regionNum=",j)
                 clickRegion(i,j) # 选择区域
                 selectRegion(i,j) #进行区域战斗逻辑
@@ -66,11 +67,10 @@ def script(mode:int,times:int=34):
 # 模拟宇宙仅需在可操作界面
 if __name__ == '__main__':
     print("Select Window")
-    if 0 == getStarTrain():
+    if 0 == cfg.getStarTrain():
         print("Not Found Game Window")
         exit()
-    print(cfg.bC)
-    pa.screenshot("data/fightEnd.png",region=(34+cfg.bC[0],112+cfg.bC[1],35,20)) #截取左上角手机底部图案，以便确认是否结束战斗
+    pa.screenshot("data/fightMarker.png",region=(cfg.nMC['fightMarker'][0]+cfg.bC[0],cfg.nMC['fightMarker'][1]+cfg.bC[1],cfg.nMC['fightMarker'][2],cfg.nMC['fightMarker'][3])) #截取右下角轮盘，以便确认是否战斗状态
     print("Start Script")
     script(mode=1,times=2)
     print("End Script")
