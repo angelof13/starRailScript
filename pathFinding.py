@@ -15,7 +15,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
     # regionN:      地图内地区序列，从0开始，但不是游戏内的第一个区域，而是第一个有怪的区域，如bigMapN=0,regionN=0，既为黑塔空间站的基座舱段 
     # transportN:   该地区内的第几个传送点，-1表示该区域内仅有一个传送点需要点击 
     # option:       需要点击的传送点周围有其他可点击图标时，设置为非0，表示在出现的选项框中选择第几个，目前所有该类传送点都是选择第一个，故仅实现选择第一个的坐标
-    def _clickRegion(bigMapN:int,regionN:int,transportN:int=-1,option:int=0):
+    def _clickTransmitPoint(bigMapN:int,regionN:int,transportN:int=-1,option:int=0):
         if DEBUG == 2:
             return 0
         #点击小地图传送点
@@ -38,14 +38,14 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
         # 黑塔空间站 rN: 哪一个地区 node: 方便DeBug，有多个节点时，测试第几个节点
         def _region0(rN: int, node:int=0):
             if rN == 0: # 基座舱段
-                _clickRegion(0,rN) #该区域仅需一个传送点
+                _clickTransmitPoint(0,rN) #该区域仅需一个传送点
                 if DEBUG == 1:
                     return 1
                 aSequence = (['s',3], ['c'], ['CF'], ['s',1], ['c'], ['s',2.8], ['c'],['a',0.2], ['c'], ['a',1.5], ['s',2], ['c'],['m',1])
                 cfg.action(aSequence)
             elif rN == 1: # 收容舱段
                 for rNN in range (node,3): # 扫荡该区域需要用到3个传送点
-                    _clickRegion(0,rN,rNN)
+                    _clickTransmitPoint(0,rN,rNN)
                     if DEBUG == 1:
                         return 1
                     if rNN == 0:
@@ -61,9 +61,9 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
             elif rN == 2: # 支援舱段
                  for rNN in range (node,2):
                     if rNN == 0:
-                        _clickRegion(0,rN,rNN,1)
+                        _clickTransmitPoint(0,rN,rNN,1)
                     else:
-                        _clickRegion(0,rN,rNN)
+                        _clickTransmitPoint(0,rN,rNN)
                     if DEBUG == 1:
                         return 1
                     if rNN == 0:
@@ -79,13 +79,13 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
         # 雅利洛-Ⅵ  rN: 哪一个地区 node: 方便DeBug，有多个节点时，测试第几个节点
         def _region1(rN: int, node:int=0):
             if rN == 0: # 城郊雪原
-                _clickRegion(1,rN)
+                _clickTransmitPoint(1,rN)
                 if DEBUG == 1:
                     return 1
                 aSequence = (['a',1],['sa', 3], ['c'], ['CF'],['sa',3],['a',1],['w',4],['dw',2],['c'],['CF'],['dw',7],['w',2],['a',2],['aw',1.4],['c'],['a',4],['wa',3],['c'],['CF'],['w',3],['d',1],['c'],['CF'],['m',1])
                 cfg.action(aSequence)
             elif rN == 1: # 边缘通路
-                _clickRegion(1,rN)
+                _clickTransmitPoint(1,rN)
                 if DEBUG == 1:
                     return 1
                 aSequence = (['s',4],['c'],['a',1.9],['c'],['a',2.5],['c'],['CF'],['d',4.5],['sd',2.2],['c'],['c'],['CF'],['c'],['d',2],['c'],['c'],['CF'],['d',3.7],['w',2.7],['c'],['CF'],
@@ -95,7 +95,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                 return 1
             elif rN == 3: # 残响回廊
                 for rNN in range (node,4):
-                    _clickRegion(1,rN,rNN)
+                    _clickTransmitPoint(1,rN,rNN)
                     if DEBUG == 1:
                         return 1
                     if rNN == 0:
@@ -113,9 +113,9 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
             elif rN == 4: # 永冬岭
                 for rNN in range (node,2):
                     if rNN == 0:
-                        _clickRegion(1,rN,rNN,1)
+                        _clickTransmitPoint(1,rN,rNN,1)
                     else:
-                        _clickRegion(1,rN,rNN)
+                        _clickTransmitPoint(1,rN,rNN)
                     if DEBUG == 1:
                         return 1
                     if rNN == 0:
@@ -130,9 +130,9 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
             elif rN == 6: # 大矿区
                 for rNN in range (node,4):
                     if rNN == 2:
-                        _clickRegion(1,rN,rNN,1)
+                        _clickTransmitPoint(1,rN,rNN,1)
                     else:
-                        _clickRegion(1,rN,rNN)
+                        _clickTransmitPoint(1,rN,rNN)
                     if DEBUG == 1:
                         return 1
                     if rNN == 0:
@@ -148,7 +148,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                         return 1
             elif rN == 7: # 铆钉镇
                 for rNN in range (node,2):
-                    _clickRegion(1,rN,rNN)
+                    _clickTransmitPoint(1,rN,rNN)
                     if DEBUG == 1:
                         return 1
                     if rNN == 0:
@@ -159,7 +159,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                     if DEBUG == 2:
                         return 1
             elif rN == 8: # 机械聚落
-                _clickRegion(1,rN)
+                _clickTransmitPoint(1,rN)
                 if DEBUG == 1:
                     return 1
                 aSequence = (['ds',0.8],['c'],['CF'],['as',2.8],['sd',2.3],['c'],['sd',2.5],['sa',1],['c'],['CF'],['dw',1],['aw',2.5],['as',4],['c'],['as',12],['w',0.3],['a',0.5],['c'],['c'],['c'],['CF'],['c'],['d',2],['sd',1.3],['c'],['CF'],
@@ -172,7 +172,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
         def _region2(rN: int, node:int=0):
             if rN == 0: # 流云渡
                 for rNN in range (node,4):
-                    _clickRegion(2,rN,rNN)
+                    _clickTransmitPoint(2,rN,rNN)
                     if DEBUG == 1:
                         return 1
                     if rNN == 0:
@@ -187,11 +187,11 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                     if DEBUG == 2:
                         return 1
             elif rN == 1: # 迴星港
-                for rNN in range (2,3):
+                for rNN in range (node,3):
                     if rNN == 0:
-                        _clickRegion(2,rN,rNN,1)
+                        _clickTransmitPoint(2,rN,rNN,1)
                     else:
-                        _clickRegion(2,rN,rNN)
+                        _clickTransmitPoint(2,rN,rNN)
                     if DEBUG == 1:
                         return 1
                     if rNN == 0:
@@ -210,8 +210,8 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
             elif rN == 2: # 长乐天
                 return 1
             elif rN == 3: # 太卜司
-                for rNN in range (3,4):
-                    _clickRegion(2,rN,rNN)
+                for rNN in range (node,4):
+                    _clickTransmitPoint(2,rN,rNN)
                     if DEBUG == 1:
                         return 1
                     if rNN == 0:
@@ -228,7 +228,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                         return 1
             elif rN == 4: # 工造司
                 for rNN in range (node,4):
-                    _clickRegion(2,rN,rNN)
+                    _clickTransmitPoint(2,rN,rNN)
                     if DEBUG == 1:
                         return 1
                     if rNN == 0:
@@ -244,7 +244,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                         return 1
             elif rN == 5: # 丹鼎司
                 for rNN in range (node,6):
-                    _clickRegion(2,rN,rNN)
+                    _clickTransmitPoint(2,rN,rNN)
                     if DEBUG == 1:
                         return 1
                     if rNN == 0:
@@ -267,7 +267,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                         return 1
             elif rN == 6: # 鳞渊境
                 for rNN in range (node,5):
-                    _clickRegion(2,rN,rNN)
+                    _clickTransmitPoint(2,rN,rNN)
                     if DEBUG == 1:
                         return 1
                     if rNN == 0:

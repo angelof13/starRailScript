@@ -75,7 +75,7 @@ regionPoint=(
         [[1315,570],[340,585],[735,515],[660,585],[865,585]] # 鳞渊境
     ))
 
-# 根据设置窗口分辨率缩放
+# 根据设置窗口分辨率缩放相应坐标
 def _correct():
     #计算比例
     _ratio=[round(vP["_resolution"][0]/1920,2),round(vP["_resolution"][1]/1080,2)]
@@ -151,7 +151,7 @@ def action(actionSequence: tuple):
         elif actionI[0] == 'cf' or actionI[0] == 'CF': #检测战斗是否结束
 
             # 检测战斗是否结束 interval: 间隔几秒检查一次，默认是2秒
-            def checkFightEnd(interval:int=2):
+            def _checkFightEnd(interval:int=2):
                 for i in range(2,5): #检测是否进入战斗，尝试以2s,3s,4s的间隔检查三次
                     time.sleep(i)
                     if None == pa.locateOnScreen("data/fightMarker.png",region=(nMC['fightMarker'][0]+bC[0],nMC['fightMarker'][1]+bC[1],nMC['fightMarker'][2],nMC['fightMarker'][3]),confidence=0.9,grayscale=True):
@@ -165,9 +165,9 @@ def action(actionSequence: tuple):
 
             aIL = len(actionI)
             if aIL == 1:
-                checkFightEnd()
+                _checkFightEnd()
             else:
-                checkFightEnd(actionI[1])
+                _checkFightEnd(actionI[1])
         elif actionI[0] == 'f' or actionI[0] == 'F': #按F，进入画卷，模拟宇宙对话
             time.sleep(1)
             pa.press(actionI[0])
