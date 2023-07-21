@@ -42,10 +42,10 @@ def script():
     time.sleep(1)
     pa.click(cfg.nMC['subSign'][0]+cfg.bC[0],cfg.nMC['subSign'][1]+cfg.bC[1],clicks=10,interval=0.3) # 点击缩放地图，保证传送点的位置正确
     time.sleep(1)
-    for i in range(2,3): # 三个大体图
+    for i in range(0,3): # 三个大体图
         print("bigMapNum=",i)
         clickBigMap(i) # 点击大地图
-        for j in range(3,cfg.bigMapRegionNum[i]): # 大地图中的区域选择 
+        for j in range(0,cfg.bigMapRegionNum[i]): # 大地图中的区域选择 
             print("regionNum=",j)
             clickRegion(i,j) # 选择区域
             time.sleep(1)
