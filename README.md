@@ -15,7 +15,7 @@
 安装完毕后，***右键开始菜单*** 或 ***win+x***，打开 ***终端(管理员)*** 或 ***powershell(管理员)*** ，输入`python`，确定能够进入python命令行，然后输入`exit()`，退出python命令行，回到终端界面
 
 ***
-输入`python -m pip install \--upgrade pip`，等待pip更新完毕
+输入`python -m pip install --upgrade pip`，等待pip更新完毕
 
 ***
 安装所需的几个模块，-i后面为pip国内镜像源
