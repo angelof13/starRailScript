@@ -21,14 +21,14 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
         #点击小地图传送点
         time.sleep(4)
         if transportN != -1:
-            pa.click(x=cfg.regionPoint[bigMapN][regionN][transportN][0]+cfg.bC[0],y=cfg.regionPoint[bigMapN][regionN][transportN][1]+cfg.bC[1])
+            pa.click(x=cfg.regionPoint[bigMapN][regionN][transportN][0],y=cfg.regionPoint[bigMapN][regionN][transportN][1])
         else:
-            pa.click(x=cfg.regionPoint[bigMapN][regionN][0]+cfg.bC[0],y=cfg.regionPoint[bigMapN][regionN][1]+cfg.bC[1])
+            pa.click(x=cfg.regionPoint[bigMapN][regionN][0],y=cfg.regionPoint[bigMapN][regionN][1])
         time.sleep(2)
         if option == 1:
-            pa.click(x=cfg.nMC['select'][0]+cfg.bC[0],y=cfg.nMC['select'][1]+cfg.bC[1])
+            pa.click(x=cfg.nMC['select'][0],y=cfg.nMC['select'][1])
             time.sleep(2)
-        pa.click(x=cfg.nMC['transmit'][0]+cfg.bC[0],y=cfg.nMC['transmit'][1]+cfg.bC[1])
+        pa.click(x=cfg.nMC['transmit'][0],y=cfg.nMC['transmit'][1])
         time.sleep(0.5)
         pa.press('m')
         time.sleep(cfg.vP['loadingTime'])
@@ -292,9 +292,9 @@ if __name__ == '__main__':
     # 0：非DEBUG,将会执行完当前小地图
     # 1：区域内的传送点点击,若测试区域内多个传送点时，需要将人物送到上一行动的最终位置
     # 2：是区域内一个传送点的行动DEBUG，不会执行地图点击及操作结束后打开地图
-    DEBUG=2
+    DEBUG=1
     if 0 == cfg.getStarTrain():
         print("Not found game Window")
         exit()
     #0开始
-    selectRegion(2, 3,1) # Debug哪个区域直接在这里修改
+    selectRegion(1, 0,0) # Debug哪个区域直接在这里修改
