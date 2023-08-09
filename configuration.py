@@ -8,6 +8,8 @@ import win32gui as w32
 _variableParameters={
     '_resolution':[1920,1080], # 分辨率
     'loadingTime':8, # 加载等待时间，即点击传送后到角色进入地图的等待时间
+    'startBigMap':0, # 从那个地图开始扫荡
+    'startRegion':0, # 从该地图的第几个区域开始扫荡
 
     # 模拟宇宙，cosmic分支暂未完成，未合并到main分支,暂为无效参数
     'cosmicNum':6, # 世界几:1-6
@@ -29,7 +31,6 @@ nMC=_nonModifiableCoordiates
 
 # 窗口的坐标
 _baseCoordinate=[0,0,0,0]
-bC = _baseCoordinate
 
 #大地图
 # 坐标都是相对坐标，基于窗口最左上角
@@ -51,8 +52,8 @@ bigMapRegionNum=(3,9,7)
 regionPoint=(
     (
         [840,200], # 基座舱段
-        [[1030,600],[955,670],[560,600]], # 收容舱段
-        [[355,620],[630,445]] # 支援舱段
+        [[1010,600],[925,670],[540,600]], # 收容舱段
+        [[335,620],[610,445]] # 支援舱段
     ),
     (
         [1120,600], # 城郊雪原 
@@ -75,48 +76,6 @@ regionPoint=(
         [[1315,570],[340,585],[735,515],[660,585],[865,585]] # 鳞渊境
     ))
 
-# 根据设置窗口分辨率缩放相应坐标
-def _correct():
-    #计算比例
-    _ratio=[round(vP["_resolution"][0]/1920,2),round(vP["_resolution"][1]/1080,2)]
-    #修正不可修改的一些数据
-    for i in nMC:
-        if i == "gap": # 每个区域间的坐标差值，基准100
-            nMC[i] *= _ratio[1]
-        elif i == "fightMarker":
-            bias = [2 if _ratio[0]<1 else -2 if _ratio[0] !=1 else 0,2 if _ratio[1]<1 else -2 if _ratio[1] != 1 else 0]
-            nMC[i][0] = int(nMC[i][0]* _ratio[0] + bias[0])
-            nMC[i][1] = int(nMC[i][1]* _ratio[1] + bias[1])
-            nMC[i][2] = int(nMC[i][2]* _ratio[0])+1
-            nMC[i][3] = int(nMC[i][3]* _ratio[1])+1
-        else:
-            nMC[i][0] = int(nMC[i][0]* _ratio[0])
-            nMC[i][1] = int(nMC[i][1]* _ratio[1])
-        
-    #修正大地图坐标
-    for sublist in bigMap:
-        sublist[0] = int(sublist[0] * _ratio[0])
-        sublist[1] = int(sublist[1] * _ratio[1])
-    #修正选择大地图内区域的基准坐标
-    for sublist in bigMapRegionStart:
-        sublist[0] = int(sublist[0] * _ratio[0])
-        sublist[1] = int(sublist[1] * _ratio[1])
-    #修正区域坐标传送点
-    for i, sublist in enumerate(regionPoint):
-        for j, element in enumerate(sublist):
-            # 如果元素是一个列表，就遍历其中的元素和索引，并根据比例修改数据
-            if isinstance(element[0], list):
-                for k, item in enumerate(element):
-                    regionPoint[i][j][k][0] = int(regionPoint[i][j][k][0] * _ratio[0])
-                    regionPoint[i][j][k][1] = int(regionPoint[i][j][k][1] * _ratio[1])
-            else:
-                regionPoint[i][j][0] = int(regionPoint[i][j][0] * _ratio[0])
-                regionPoint[i][j][1] = int(regionPoint[i][j][1] * _ratio[1])
-
-if vP["_resolution"] != [1920,1080]:
-    print("correct coordinates")
-    _correct()
-
 # 找到星穹铁道的窗口,并选中
 def getStarTrain():
     startTrain = w32.FindWindow('UnityWndClass',u'崩坏：星穹铁道')
@@ -125,9 +84,50 @@ def getStarTrain():
     w32.ShowWindow(startTrain,win32con.SW_NORMAL)
     w32.SetForegroundWindow(startTrain)
     time.sleep(2)
-    global bC
-    bC = w32.GetWindowRect(startTrain)
-    print(bC)
+    global _baseCoordinate
+    _baseCoordinate = w32.GetWindowRect(startTrain)
+    print(_baseCoordinate)
+    print("correct coordinates")
+    
+    # 根据设置窗口分辨率缩放相应坐标，并根据获取到的窗口基准位置修改坐标
+    def _correct():
+        #计算比例
+        _ratio=[round(vP["_resolution"][0]/1920,2),round(vP["_resolution"][1]/1080,2)]
+        #修正不可修改的一些数据
+        for i in nMC:
+            if i == "gap": # 每个区域间的坐标差值，基准100
+                nMC[i] *= _ratio[1]
+            elif i == "fightMarker":
+                bias = [2 if _ratio[0]<1 else -2 if _ratio[0] !=1 else 0,2 if _ratio[1]<1 else -2 if _ratio[1] != 1 else 0]
+                nMC[i][0] = int(nMC[i][0]* _ratio[0] + bias[0] + _baseCoordinate[0])
+                nMC[i][1] = int(nMC[i][1]* _ratio[1] + bias[1] + _baseCoordinate[1])
+                nMC[i][2] = int(nMC[i][2]* _ratio[0])+1
+                nMC[i][3] = int(nMC[i][3]* _ratio[1])+1
+            else:
+                nMC[i][0] = int(nMC[i][0]* _ratio[0] + _baseCoordinate[0])
+                nMC[i][1] = int(nMC[i][1]* _ratio[1] + _baseCoordinate[1])
+
+        #修正大地图坐标
+        for sublist in bigMap:
+            sublist[0] = int(sublist[0] * _ratio[0] + _baseCoordinate[0])
+            sublist[1] = int(sublist[1] * _ratio[1] + _baseCoordinate[1])
+        #修正选择大地图内区域的基准坐标
+        for sublist in bigMapRegionStart:
+            sublist[0] = int(sublist[0] * _ratio[0] + _baseCoordinate[0])
+            sublist[1] = int(sublist[1] * _ratio[1] + _baseCoordinate[1])
+        #修正区域坐标传送点
+        for i, sublist in enumerate(regionPoint):
+            for j, element in enumerate(sublist):
+                # 如果元素是一个列表，就遍历其中的元素和索引，并根据比例修改数据
+                if isinstance(element[0], list):
+                    for k, item in enumerate(element):
+                        regionPoint[i][j][k][0] = int(regionPoint[i][j][k][0] * _ratio[0] + _baseCoordinate[0])
+                        regionPoint[i][j][k][1] = int(regionPoint[i][j][k][1] * _ratio[1] + _baseCoordinate[1])
+                else:
+                    regionPoint[i][j][0] = int(regionPoint[i][j][0] * _ratio[0] + _baseCoordinate[0])
+                    regionPoint[i][j][1] = int(regionPoint[i][j][1] * _ratio[1] + _baseCoordinate[1])
+    #调用坐标修正
+    _correct()
     return 1
 
 # 地图内操作解析
@@ -141,12 +141,12 @@ def action(actionSequence: tuple):
         elif actionI[0] == 'y' or actionI[0] == 'Y': #移动纵向视角，非精准操纵，慎用，甚至感觉没用(ˉ▽ˉ；)...
             #一圈大概7720
             pdi.moveRel(xOffset=0, yOffset=actionI[1], relative=True)
-        elif actionI[0] == 'c' or actionI[0] == 'C': #左键，平A
+        elif actionI[0] == 'c' or actionI[0] == 'C': #左键，平A,有第二个参数(形如[c,[100,100]]),即为点击某个相对位置
             aIL = len(actionI)
             if aIL == 1:
                 pa.click()
             else:
-                pa.click(x=actionI[1][0]+bC[0],y=actionI[1][1]+bC[1])
+                pa.click(x=actionI[1][0]+_baseCoordinate[0],y=actionI[1][1]+_baseCoordinate[1])
             time.sleep(1)
         elif actionI[0] == 'cf' or actionI[0] == 'CF': #检测战斗是否结束
 
@@ -154,12 +154,12 @@ def action(actionSequence: tuple):
             def _checkFightEnd(interval:int=2):
                 for i in range(2,5): #检测是否进入战斗，尝试以2s,3s,4s的间隔检查三次
                     time.sleep(i)
-                    if None == pa.locateOnScreen("data/fightMarker.png",region=(nMC['fightMarker'][0]+bC[0],nMC['fightMarker'][1]+bC[1],nMC['fightMarker'][2],nMC['fightMarker'][3]),confidence=0.9,grayscale=True):
+                    if None == pa.locateOnScreen("data/fightMarker.png",region=(nMC['fightMarker'][0],nMC['fightMarker'][1],nMC['fightMarker'][2],nMC['fightMarker'][3]),confidence=0.9,grayscale=True):
                         print("fight start")
                         break
                 while True:
                     time.sleep(interval)
-                    if None != pa.locateOnScreen("data/fightMarker.png",region=(nMC['fightMarker'][0]+bC[0],nMC['fightMarker'][1]+bC[1],nMC['fightMarker'][2],nMC['fightMarker'][3]),confidence=0.9,grayscale=True):
+                    if None != pa.locateOnScreen("data/fightMarker.png",region=(nMC['fightMarker'][0],nMC['fightMarker'][1],nMC['fightMarker'][2],nMC['fightMarker'][3]),confidence=0.9,grayscale=True):
                         print("fight end")
                         return 1
 
