@@ -158,11 +158,15 @@ def action(actionSequence: tuple):
                     if None == pa.locateOnScreen("data/fightMarker.png",region=(nMC['fightMarker'][0],nMC['fightMarker'][1],nMC['fightMarker'][2],nMC['fightMarker'][3]),confidence=0.9,grayscale=True):
                         print("fight start")
                         break
+                times = 0
                 while True:
                     time.sleep(interval)
                     if None != pa.locateOnScreen("data/fightMarker.png",region=(nMC['fightMarker'][0],nMC['fightMarker'][1],nMC['fightMarker'][2],nMC['fightMarker'][3]),confidence=0.9,grayscale=True):
                         print("fight end")
                         return 1
+                    times += 1
+                    if times == 30:
+                        pa.click()
 
             aIL = len(actionI)
             if aIL == 1:

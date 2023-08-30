@@ -300,4 +300,4 @@ if __name__ == '__main__':
         print("Not found game Window")
         exit()
     #0开始
-    selectRegion(2, 7,3) # Debug哪个区域直接在这里修改
+    selectRegion(0, 0, 0) # Debug哪个区域直接在这里修改
