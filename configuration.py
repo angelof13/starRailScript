@@ -20,7 +20,7 @@ vP = _variableParameters
 #不可修改的一些数据，抽象出来仅为匹配分辨率
 _nonModifiableCoordiates={
     'subSign':[630,1020], # 缩放地图需要点击的坐标
-    'fightMarker':[1840,1082,40,20], # 查找战斗结束的坐标及区域
+    'fightMarker':[100,1004,30,15], # 查找战斗结束的坐标及区域
     'interstellarChart':[1600,180], # 星际航线的坐标
     'gap':100,
 
@@ -46,7 +46,7 @@ bigMapRegionStart=([1520,465],
                    [1520,780]) # 仙舟，当身处太卜司后，打开地图会默认展示后面的区域，变化后的基准坐标
 
 # 大地图内可战斗的区域数量，非准确数量，值为从第一个可战斗区域到最后一个可战斗区域之间的差值
-bigMapRegionNum=(3,9,7)
+bigMapRegionNum=(3,9,8)
 
 # 区域内的传送点坐标
 regionPoint=(
@@ -70,6 +70,7 @@ regionPoint=(
         [[910,185],[750,725],[750,690],[785,660]], # 流云渡 
         [[1040,330],[665,545],[650,705]], # 迴星港 
         [0,0], # 长乐天
+        [0,0], # 金人巷
         [[450,220],[540,440],[540,180],[570,800]], # 太卜司 
         [[560,230],[660,400],[960,300],[815,205]], # 工造司
         [[610,185],[650,830],[640,500],[640,390],[940,220],[690,930]], # 丹鼎司
@@ -98,7 +99,7 @@ def getStarTrain():
             if i == "gap": # 每个区域间的坐标差值，基准100
                 nMC[i] *= _ratio[1]
             elif i == "fightMarker":
-                bias = [2 if _ratio[0]<1 else -2 if _ratio[0] !=1 else 0,2 if _ratio[1]<1 else -2 if _ratio[1] != 1 else 0]
+                bias = [2 if _ratio[0]<1 else -2 if _ratio[0]!=1 else 0, 2 if _ratio[1]<1 else -2 if _ratio[1]!=1 else 0]
                 nMC[i][0] = int(nMC[i][0]* _ratio[0] + bias[0] + _baseCoordinate[0])
                 nMC[i][1] = int(nMC[i][1]* _ratio[1] + bias[1] + _baseCoordinate[1])
                 nMC[i][2] = int(nMC[i][2]* _ratio[0])+1
@@ -196,4 +197,3 @@ def action(actionSequence: tuple):
                 _run(actionI[0], actionI[1], True)
 
     time.sleep(1)
-    

@@ -1,6 +1,7 @@
 from configuration import time, pa, action, getStarTrain
 import configuration as cfg
 import cv2
+import math
 import numpy as np
 
 # 进入模拟宇宙
@@ -99,7 +100,6 @@ if __name__ == '__main__':
     cv2.circle(mask, (94,94),93,(255,255,255),-1)
     map_image = cv2.copyTo(temp,mask)
     map_image[np.where(mask == 0)] = (255,255,255) #扣出地图，对地图外填充白色
-    cv2.imshow("map",map_image)
 
     #寻找角色图形，识别角色朝向
     angle=0
@@ -109,7 +109,6 @@ if __name__ == '__main__':
     user_image = cv2.inRange(map_HSV, lower_user_color,upper_user_color)
     cv2.imshow("mapHSV",map_HSV)
     cv2.setMouseCallback("mapHSV",getpos,1)
-    cv2.imshow("use",user_image)
     # 轮廓检测，找到图像中的轮廓
     contours, _ = cv2.findContours(user_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     # 获取三角形的朝向角度
@@ -131,38 +130,40 @@ if __name__ == '__main__':
     activeArea3 = cv2.inRange(map_gray,170,190) # 角色视野扫过桥，更浅色
     kernel = np.ones((3, 3), np.uint8)  # 定义操作的核大小
     user_temp = cv2.dilate(user_image, kernel, iterations=7) # 进行角色像素的膨胀操作，便于路径寻找
-    cv2.imshow("ke",user_temp)
     activeArea = cv2.bitwise_or(user_temp,cv2.bitwise_or(activeArea3,cv2.bitwise_or(activeArea1,activeArea2)))
 
     # 使用连通区域分析找到白色块
     _, labels, stats, _ = cv2.connectedComponentsWithStats(activeArea)
     # 设置阈值，保留大于特定值的白色块
-    threshold_area = 700  # 设置特定值为1000像素
+    threshold_area = 700  # 设置特定值为700像素
     activeArea = np.zeros_like(activeArea)
     for label, stat in enumerate(stats[1:], start=1):
         if stat[4] > threshold_area:
             activeArea[labels == label] = 255
-    cv2.imshow("active1",activeArea)
     activeArea = cv2.morphologyEx(activeArea, cv2.MORPH_CLOSE, kernel,iterations=3) #收缩
 
-    activeArea = cv2.cvtColor(activeArea,cv2.COLOR_GRAY2BGR)
-    cv2.circle(activeArea,(94,94),92,(0,0,255),1)
     cv2.imshow("active",activeArea)
-
-    # 加载图像
-    image = np.array(activeArea)
-
-    # 最大池化
-    max_pooled = cv2.resize(image, None, fx=0.2, fy=0.2, interpolation=cv2.INTER_NEAREST)
-
-    # 平均池化
-    avg_pooled = cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_NEAREST)
-
-
-    # 显示原始图像和池化后的图像
-    cv2.imshow("Original Image", image)
-    cv2.imshow("Max Pooled Image", max_pooled)
-    cv2.imshow("Average Pooled Image", avg_pooled)
+    center=[94,94]
+    redius=92
+    endTempArr=[0,0]
+    endPoint=[0,0]
+    cumulate=0
+    len=0
+    for i in range(0,361):
+        x=int(center[0]+redius*math.sin(i))
+        y=int(center[1]+redius*math.cos(i))
+        if 0 != activeArea[y][x]:
+            endTempArr[0]+=x
+            endTempArr[1]+=y
+            len+=1
+        elif 0 == activeArea[y][x] and cumulate < len:
+            endPoint[0]=int(endTempArr[0]/len)
+            endPoint[1]=int(endTempArr[1]/len)
+            cumulate = len
+            len=0
+            endTempArr[0]=0
+            endTempArr[1]=0
+    
 
     cv2.waitKey(20000)
     cv2.destroyAllWindows()
