@@ -209,7 +209,9 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                         return 1
             elif rN == 2: # 长乐天
                 return 1
-            elif rN == 3: # 太卜司
+            elif rN == 3: # 金人巷
+                return 1
+            elif rN == 4: # 太卜司
                 for rNN in range (node,4):
                     _clickTransmitPoint(2,rN,rNN)
                     if DEBUG == 1:
@@ -226,7 +228,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                     cfg.action(aSequence)
                     if DEBUG == 2:
                         return 1
-            elif rN == 4: # 工造司
+            elif rN == 5: # 工造司
                 for rNN in range (node,4):
                     _clickTransmitPoint(2,rN,rNN)
                     if DEBUG == 1:
@@ -234,7 +236,8 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                     if rNN == 0:
                         aSequence = (['w', 5],['d', 1],['c'],['c'],['CF'],['c'],['d', 3.8],['c'],['CF'],['s',0.7],['a',3],['s',1],['d',1],['s',0.3],['c'],['CF'],['d',1],['c'],['CF'],['w',0.5],['a',6],['w',0.7],['a',3.5],['s',0.1],['c'],['CF'],['a',2],['s',0.2],['c'],['CF'],['m',1])
                     elif rNN == 1:
-                        aSequence = (['a',1.5],['s',1.5],['a',5.3],['c'],['CF'],['s',0.8],['a',4],['w',1.4],['a',1],['c'],['CF'],['a',3.5],['c'],['CF'],['a',4.5],['w',3],['a',2],['c'],['c'],['CF'],['a',2],['c'],['c'],['CF'],['a',2],['c'],['c'],['CF'],['a',3],['c'],['c'],['CF'],['m',1])
+                        aSequence = (['a',1.5],['s',1.5],['a',5.3],['c'],['CF'],['s',0.1],['c'],['CF'],['s',0.7],['a',4],['w',1.4],['a',1],['c'],['CF'],['a',3.5],['c'],['CF'],['a',2],['c'],
+                                     ['a',2.3],['w',3.2],['c'],['a',5],['c'],['c'],['CF'],['a',4],['c'],['c'],['CF'],['m',1])
                     elif rNN == 2:
                         aSequence = (['a',1],['s',0.5],['d',1.5],['w',2],['d',2],['s',2],['d',0.5],['c'],['CF'],['d',1.5],['c'],['CF'],['d',1.5],['w',0.5],['c'],['CF'],['a',1],['c'],['w',5],['a',1],['s',0.1],['c'],['CF'],['w',1.5],['c'],['CF'],['a',3],['w',1.7],['a',2.5],['m',1])
                     elif rNN == 3:
@@ -242,7 +245,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                     cfg.action(aSequence)
                     if DEBUG == 2:
                         return 1
-            elif rN == 5: # 丹鼎司
+            elif rN == 6: # 丹鼎司
                 for rNN in range (node,6):
                     _clickTransmitPoint(2,rN,rNN)
                     if DEBUG == 1:
@@ -265,20 +268,20 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                     cfg.action(aSequence)
                     if DEBUG == 2:
                         return 1
-            elif rN == 6: # 鳞渊境
+            elif rN == 7: # 鳞渊境
                 for rNN in range (node,5):
                     _clickTransmitPoint(2,rN,rNN)
                     if DEBUG == 1:
                         return 1
                     if rNN == 0:
-                        aSequence = (['s', 4],['wd',4],['d',0.5],['c'],['CF'],['m',1])
+                        aSequence = (['s', 4],['wd',4],['d',0.5],['c'],['CF'],['c'],['CF'],['m',1])
                     elif rNN == 1:
                         aSequence = (['c'],['a',3],['sa',1],['a',3.5],['c'],['CF'],['wa',2],['c'],['CF'],['a',1.5],['c'],['CF'],
-                                     ['d',0.9],['w',7],['c'],['CF'],['w',4.2],['c'],['a',5],['c'],['CF'],['m',1])
+                                     ['d',0.9],['w',6],['c'],['CF'],['w',5.2],['c'],['a',5],['c'],['CF'],['m',1])
                     elif rNN == 2:
                         aSequence = (['s',1],['c'],['s',0.5],['d',1.8],['s',2.5],['c'],['d',0.3],['s',2.3],['c'],['CF'],['c'],['CF'],['wd',0.5],['c'],['m',1])
                     elif rNN == 3:
-                        aSequence = (['s',1.9],['d',5],['c'],['d',10.6],['c'],['CF'],['a',0.3],['w',7],['c'],['CF'],['a',1],['c'],['CF'],['m',1])
+                        aSequence = (['s',1.9],['d',5],['c'],['CF'],['c'],['d',9.5],['w',0.5],['d',0.5],['w',6.3],['c'],['CF'],['a',1],['c'],['CF'],['m',1])
                     elif rNN == 4:
                         aSequence = (['s',2],['a',13.5],['w',2],['dw',6.5],['w',2],['wd',2.8],['c'],['CF'],['w',0.5],['wd',1],['c'],['CF'],['m',1])
                     cfg.action(aSequence)
@@ -292,9 +295,9 @@ if __name__ == '__main__':
     # 0：非DEBUG,将会执行完当前小地图
     # 1：区域内的传送点点击,若测试区域内多个传送点时，需要将人物送到上一行动的最终位置
     # 2：是区域内一个传送点的行动DEBUG，不会执行地图点击及操作结束后打开地图
-    DEBUG=1
+    DEBUG=2
     if 0 == cfg.getStarTrain():
         print("Not found game Window")
         exit()
     #0开始
-    selectRegion(1, 0,0) # Debug哪个区域直接在这里修改
+    selectRegion(2, 7,3) # Debug哪个区域直接在这里修改
