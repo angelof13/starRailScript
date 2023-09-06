@@ -165,8 +165,9 @@ def action(actionSequence: tuple):
                         print("fight end")
                         return 1
                     times += 1
-                    if times == 30:
+                    if times >= 30:
                         pa.click()
+                        times=0
 
             aIL = len(actionI)
             if aIL == 1:
