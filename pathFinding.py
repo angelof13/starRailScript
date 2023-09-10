@@ -85,12 +85,22 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                 aSequence = (['a',1],['sa', 3], ['c'], ['CF'],['sa',3],['a',1],['w',4],['dw',2],['c'],['CF'],['dw',7],['w',2],['a',2],['aw',1.4],['c'],['a',4],['wa',3],['c'],['CF'],['w',3],['d',1],['c'],['CF'],['m',1])
                 cfg.action(aSequence)
             elif rN == 1: # 边缘通路
-                _clickTransmitPoint(1,rN)
-                if DEBUG == 1:
-                    return 1
-                aSequence = (['s',4],['c'],['a',1.9],['c'],['a',2.5],['c'],['CF'],['d',4.5],['sd',2.2],['c'],['c'],['CF'],['c'],['d',2],['c'],['c'],['CF'],['d',3.7],['w',2.7],['c'],['CF'],
-                             ['d',4.3],['s',1.3],['d',5],['c'],['CF'],['d',1],['c'],['dw',2],['c'],['CF'],['m',1])
-                cfg.action(aSequence)
+                for rNN in range (node,3):
+                    if rNN in [1,2]:
+                        _clickTransmitPoint(1,rN,rNN,1)
+                    else:
+                        _clickTransmitPoint(1,rN,rNN)
+                    if DEBUG == 1:
+                        return 1
+                    if rNN == 0:
+                        aSequence = (['s',4],['c'],['a',1.9],['c'],['a',2.5],['c'],['CF'],['d',4.5],['sd',2.2],['c'],['c'],['CF'],['c'],['d',2],['c'],['c'],['CF'],['m',1])
+                    elif rNN == 1:
+                        aSequence = (['w', 0.5],['a',3.5],['c'],['CF'],['m',1])
+                    elif rNN == 2:
+                        aSequence = (['s',5.5],['c'],['c'],['CF'],['c'],['sd',1.5],['c'],['CF'],['m',1])
+                    cfg.action(aSequence)
+                    if DEBUG == 2:
+                        return 1
             elif rN == 2: # 禁卫铁区
                 return 1
             elif rN == 3: # 残响回廊
@@ -101,12 +111,12 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                     if rNN == 0:
                         aSequence = (['c'], ['w', 0.6], ['dw',1.1], ['w',1.7],['c'],['w',3],['a',0.5],['c'],['CF'],['m',1])
                     elif rNN == 1:
-                        aSequence = (['s', 0.6],['a',7.3],['wa',2],['w',0.3],['c'],['CF'],['m',1])
+                        aSequence = (['s', 0.6],['a',7.3],['wa',1.5],['c'],['CF'],['m',1])
                     elif rNN == 2:
                         aSequence = (['a',1],['w',1.5],['c'],['a',2.6],['w',3.7],['c'],['CF'],['c'],['dw',2.3],['c'],['c'],['CF'],['c'],['wd',2],['ds',2],['as',0.5],['s',0.5],['as',0.5],['c'],['CF'],['a',1],['s',0.5],['a',0.5],['s',2],['c'],['CF'],['m',1])
                     elif rNN == 3:
-                        aSequence = (['w',0.4],['d',1.3],['w',1.8],['c'],['c'],['CF'],['w',1.2],['c'],['a',0.6],['w',1],['c'],['CF'],['w',2],['c'],['w',4],['c'],['c'],['CF'],['c'],['w',2.9],['c'],['CF'],['dw',1.5],['c'],
-                                     ['as',1.5],['s',1.4],['d',2],['c'],['CF'],['c'],['d',1.6],['c'],['CF'],['w',0.6],['d',5],['w',2],['c'],['CF'],['w',2],['c'],['CF'],['w',0.6],['a',2.5],['c'],['c'],['CF'],['m',1])
+                        aSequence = (['w',0.4],['d',1.3],['w',1.8],['c'],['c'],['CF'],['c'],['w',1.2],['c'],['a',0.6],['w',1],['c'],['CF'],['w',2],['c'],['w',4],['c'],['c'],['CF'],['c'],['w',2.9],['c'],['CF'],['dw',1.5],['c'],
+                                     ['as',1.5],['s',1.4],['d',2],['c'],['d',1.6],['c'],['CF'],['w',0.6],['d',5],['w',2],['c'],['CF'],['w',2],['c'],['CF'],['w',0.6],['a',2.5],['c'],['c'],['CF'],['m',1])
                     cfg.action(aSequence)
                     if DEBUG == 2:
                         return 1
@@ -300,4 +310,4 @@ if __name__ == '__main__':
         print("Not found game Window")
         exit()
     #0开始
-    selectRegion(0, 0, 0) # Debug哪个区域直接在这里修改
+    selectRegion(2, 1, 0) # Debug哪个区域直接在这里修改
