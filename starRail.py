@@ -27,12 +27,12 @@ moveFlag:int=0
 # regionN: 地图内地区序列，从0开始，但不是游戏内的第一个区域，而是第一个有怪的区域，如bigMapN=0,regionN=0，既为黑塔空间站的基座舱段 
 def clickRegion(bigMapN:int,regionN:int):
     time.sleep(2)
-    def move():
+    def move(rel:int):
         global moveFlag
         if moveFlag == 0:
                 pa.mouseDown(x=cfg.bigMapRegionStart[0][0],y=cfg.bigMapRegionStart[0][1])
                 time.sleep(0.5)
-                pa.moveRel(0,-400,1)
+                pa.moveRel(0,rel,1)
                 pa.mouseUp()
                 time.sleep(0.5)
                 moveFlag = 1
@@ -40,15 +40,17 @@ def clickRegion(bigMapN:int,regionN:int):
         pa.click(x=cfg.bigMapRegionStart[0][0],y=cfg.bigMapRegionStart[0][1]+regionN*cfg.nMC['gap'])
     elif bigMapN == 1: # 雅利洛-Ⅵ
         if regionN < 4:
+            move(500)
             pa.click(x=cfg.bigMapRegionStart[0][0],y=cfg.bigMapRegionStart[0][1]+regionN*cfg.nMC['gap'])
         else:
-            move()
+            move(-500)
             pa.click(x=cfg.bigMapRegionStart[1][0],y=cfg.bigMapRegionStart[1][1]+(regionN-4)*cfg.nMC['gap'])
     elif bigMapN == 2: # 仙舟
         if regionN < 5:
+            move(500)
             pa.click(x=cfg.bigMapRegionStart[0][0],y=cfg.bigMapRegionStart[0][1]+regionN*cfg.nMC['gap'])
         else:
-            move()
+            move(-500)
             pa.click(x=cfg.bigMapRegionStart[2][0],y=cfg.bigMapRegionStart[2][1]+(regionN-5)*cfg.nMC['gap'])
     time.sleep(1)
 
@@ -65,8 +67,11 @@ def script():
         print("bigMapNum=",i)
         moveFlag = 0
         clickBigMap(i) # 点击大地图
-        for j in range(cfg.vP['startRegion'],cfg.bigMapRegionNum[i]): # 大地图中的区域选择 
+        startRegion = cfg.vP['startRegion']
+        for j in range(startRegion,cfg.bigMapRegionNum[i]): # 大地图中的区域选择 
             print("regionNum=",j)
+            if cfg.vP['startRegion'] != 0:
+                cfg.vP['startRegion'] = 0
             clickRegion(i,j) # 选择区域
             time.sleep(1)
             if DEBUG == 0:
@@ -80,7 +85,9 @@ if __name__ == '__main__':
     if 0 == cfg.getStarTrain():
         print("Not Found Game Window")
         exit()
-    pa.screenshot("data/fightMarker.png",region=(cfg.nMC['fightMarker'][0],cfg.nMC['fightMarker'][1],cfg.nMC['fightMarker'][2],cfg.nMC['fightMarker'][3])) #截取右下角轮盘，以便确认是否战斗状态
+    time.sleep(2)
+    print(cfg.nMC['fightMarker'])
+    pa.screenshot("data/fightMarker.png",region=(cfg.nMC['fightMarker'][0],cfg.nMC['fightMarker'][1],cfg.nMC['fightMarker'][2],cfg.nMC['fightMarker'][3])) #截取Enter部分，以便确认是否战斗状态
     print("Start Script")
     script()
     print("End Script")

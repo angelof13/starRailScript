@@ -20,7 +20,7 @@ vP = _variableParameters
 #不可修改的一些数据，抽象出来仅为匹配分辨率
 _nonModifiableCoordiates={
     'subSign':[630,1020], # 缩放地图需要点击的坐标
-    'fightMarker':[100,1004,30,15], # 查找战斗结束的坐标及区域
+    'fightMarker':[100,993,30,15], # 查找战斗结束的坐标及区域
     'interstellarChart':[1600,180], # 星际航线的坐标
     'gap':100,
 
@@ -42,11 +42,11 @@ bigMap=([350,600], # 黑塔空间站
 # 选择大地图内区域的基准坐标
 # 第一个为游戏地图中右边第3个区域的坐标，区域点击基准坐标
 bigMapRegionStart=([1520,465],
-                   [1520,585], # 雅利洛VI，当身处残响回廊后，打开地图会默认展示后面的区域，变化后的基准坐标
+                   [1520,385], # 雅利洛VI，当身处残响回廊后，打开地图会默认展示后面的区域，变化后的基准坐标
                    [1520,780]) # 仙舟，当身处太卜司后，打开地图会默认展示后面的区域，变化后的基准坐标
 
 # 大地图内可战斗的区域数量，非准确数量，值为从第一个可战斗区域到最后一个可战斗区域之间的差值
-bigMapRegionNum=(3,9,8)
+bigMapRegionNum=(3,11,8)
 
 # 区域内的传送点坐标
 regionPoint=(
@@ -61,6 +61,8 @@ regionPoint=(
         [0,0], # 禁卫铁区 
         [[980,260],[735,880],[735,800],[705,810]], # 残响回廊 
         [[525,755],[780,700]], # 永冬岭 
+        [0,0], # 造物之柱 
+        [0,0], # 旧武器实验场 
         [0,0], # 磐岩镇 
         [[740,920],[740,840],[775,720],[770,620]], # 大矿区 
         [[820,770],[810,365]], # 铆钉镇 
@@ -94,16 +96,26 @@ def getStarTrain():
     def _correct():
         #计算比例
         _ratio=[round(vP["_resolution"][0]/1920,2),round(vP["_resolution"][1]/1080,2)]
+        resolution  = ([1920,1440], [1920,1200], [1920,1080], [1600,1200], [1600,900], [1440,900], [1440,1050], [1366,768], [1360,768], [1280,720])
+        fightMarker = ([100,1315],  [100,1100],  [100,993], [80,1102],   [80,832],   [72,833],   [68,968],    [65,715],   [65,715],   [60,672])
         #修正不可修改的一些数据
         for i in nMC:
             if i == "gap": # 每个区域间的坐标差值，基准100
                 nMC[i] *= _ratio[1]
             elif i == "fightMarker":
-                bias = [2 if _ratio[0]<1 else -2 if _ratio[0]!=1 else 0, 2 if _ratio[1]<1 else -2 if _ratio[1]!=1 else 0]
-                nMC[i][0] = int(nMC[i][0]* _ratio[0] + bias[0] + _baseCoordinate[0])
-                nMC[i][1] = int(nMC[i][1]* _ratio[1] + bias[1] + _baseCoordinate[1])
-                nMC[i][2] = int(nMC[i][2]* _ratio[0])+1
-                nMC[i][3] = int(nMC[i][3]* _ratio[1])+1
+                resCorrect = False
+                for resI in range(0,len(resolution)):
+                    if vP['_resolution'][0] == resolution[resI][0] and vP['_resolution'][1] == resolution[resI][1]:
+                        nMC[i][0] = fightMarker[resI][0] + _baseCoordinate[0]
+                        nMC[i][1] = fightMarker[resI][1] + _baseCoordinate[1]
+                        resCorrect = True
+                        break
+                if resCorrect == False:
+                    bias = [2 if _ratio[0]<1 else -2 if _ratio[0]!=1 else 0, 2 if _ratio[1]<1 else -2 if _ratio[1]!=1 else 0]
+                    nMC[i][0] = int(nMC[i][0]* _ratio[0] + bias[0] + _baseCoordinate[0])
+                    nMC[i][1] = int(nMC[i][1]* _ratio[1] + bias[1] + _baseCoordinate[1])
+                    nMC[i][2] = int(nMC[i][2]* _ratio[0])+1
+                    nMC[i][3] = int(nMC[i][3]* _ratio[1])+1
             else:
                 nMC[i][0] = int(nMC[i][0]* _ratio[0] + _baseCoordinate[0])
                 nMC[i][1] = int(nMC[i][1]* _ratio[1] + _baseCoordinate[1])
@@ -182,6 +194,12 @@ def action(actionSequence: tuple):
             time.sleep(1)
             pa.press(actionI[0])
             time.sleep(actionI[1])
+        elif actionI[0] == 'caps' or actionI[0] == 'Caps': #旋转视角，将视角调整为人物朝向，会连续按两次，保证大写键的原装
+            time.sleep(1)
+            pa.press('capslock')
+            time.sleep(0.2)
+            pa.press('capslock')
+            time.sleep(0.5)
         else: #其他按键操作，基本为'w''a''s''d'的组合，默认奔跑，需要走路时，在操作列表增加一位，例如['s',3,1]
 
             # 行动 key: 行动按键; sec: 行动时长; walkFlag: 是否走路，默认False，既奔跑状态

@@ -49,7 +49,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                     if DEBUG == 1:
                         return 1
                     if rNN == 0:
-                        aSequence = (['s', 5.4], ['sa', 1.8], ['c'], ['CF'], ['wd',1.3],['d',1.5],['c'],['d',1.4], ['x',3000], ['w',1.5], ['c'], ['CF'],['m',1])
+                        aSequence = (['s', 5.4], ['sa', 2.2],['s',1], ['c'], ['CF'],['w',1.3], ['wd',1.3],['d',1.5],['c'],['ds',1.4], ['caps'], ['wa',1.5], ['c'], ['CF'],['m',1])
                     elif rNN == 1:
                         aSequence = (['sa', 1.5],['a',2.4],['w',5.5],['c'],['c'],['CF'],['c'],['c'],['m',1])
                     elif rNN == 2:
@@ -135,9 +135,13 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                     cfg.action(aSequence)
                     if DEBUG == 2:
                         return 1
-            elif rN == 5: # 磐岩镇
+            elif rN == 5: # 造物之柱
                 return 1
-            elif rN == 6: # 大矿区
+            elif rN == 6: # 旧武器实验场
+                return 1
+            elif rN == 7: # 磐岩镇
+                return 1
+            elif rN == 8: # 大矿区
                 for rNN in range (node,4):
                     if rNN == 2:
                         _clickTransmitPoint(1,rN,rNN,1)
@@ -148,7 +152,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                     if rNN == 0:
                         aSequence = (['s', 0.6], ['a',5],['c'],['CF'],['a',1.5],['c'],['CF'],['w',0.5],['a',0.8],['wd',2.4],['d',0.2],['sd',3.6],['dw',2.5],['c'],['w',1],['c'],['CF'],['m',1])
                     elif rNN == 1:
-                        aSequence = (['w', 2],['d',2],['dw',1.2],['c'],['CF'],['dw',1],['c'],['CF'],['m',1])
+                        aSequence = (['w', 2],['d',1.7],['c'],['CF'],['dw',3],['c'],['CF'],['m',1])
                     elif rNN == 2:
                         aSequence = (['d', 5],['dw',1.3],['c'],['CF'],['c'],['w',1.5],['wd',1.5],['c'],['CF'],['m',1])
                     elif rNN == 3:
@@ -156,7 +160,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                     cfg.action(aSequence)
                     if DEBUG == 2:
                         return 1
-            elif rN == 7: # 铆钉镇
+            elif rN == 9: # 铆钉镇
                 for rNN in range (node,2):
                     _clickTransmitPoint(1,rN,rNN)
                     if DEBUG == 1:
@@ -168,7 +172,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                     cfg.action(aSequence)
                     if DEBUG == 2:
                         return 1
-            elif rN == 8: # 机械聚落
+            elif rN == 10: # 机械聚落
                 _clickTransmitPoint(1,rN)
                 if DEBUG == 1:
                     return 1
@@ -310,4 +314,4 @@ if __name__ == '__main__':
         print("Not found game Window")
         exit()
     #0开始
-    selectRegion(2, 1, 0) # Debug哪个区域直接在这里修改
+    selectRegion(1, 8, 2) # Debug哪个区域直接在这里修改
