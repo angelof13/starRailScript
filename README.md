@@ -22,16 +22,24 @@
 
 `pip install pyautogui -i https://pypi.tuna.tsinghua.edu.cn/simple`
 
-`pip install pydirectinput -i https://pypi.tuna.tsinghua.edu.cn/simple`
+`pip install pydirectinput -i https://pypi.tuna.tsinghua.edu.cn/simple` 
 
-`pip install pywin32 -i https://pypi.tuna.tsinghua.edu.cn/simple`
+`pip install pywin32 -i https://pypi.tuna.tsinghua.edu.cn/simple` 
 
 `pip install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple`
 ***
 设置星穹铁道为**1920*1080窗口化**(已不强制需求)，其他分辨率请在`configuration.py`中，修改![修改分辨率](data/README/resolution.png)
-带队人物选择最好是下面的推荐角色，角色置于***非* 基座舱段**的其他位置，**保持在可操作界面**，脚本运行期间，队伍战斗最好别失败，若失败则该区域后续基本无法进行，只能等待脚本运行到下一区域继续
-|推荐选择|娜塔莎|佩拉|符玄|青雀|克拉拉|驭空|
-|不推荐选择|布洛妮娅|艾丝妲|三月七|彦卿|
+
+带队人物选择最好是下面的**推荐角色**，角色置于***非* 基座舱段**的其他位置，**保持在可操作界面**，脚本运行期间，队伍战斗最好别失败，若失败则该区域后续基本无法进行，只能等待脚本运行到下一区域继续
+|推荐选择|不推荐选择|
+|:---:|:---:|
+|娜塔莎|布洛妮娅|
+|佩拉|艾丝妲|
+|符玄|三月七|
+|青雀|彦卿|
+|克拉拉||
+|驭空||
+
 其他我没有，未尝试，哈哈哈哈
 ***
 下载ZIP并解压
