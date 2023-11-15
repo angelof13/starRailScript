@@ -250,18 +250,30 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                     if DEBUG == 1:
                         return 1
                     if rNN == 0:
-                        aSequence = (['w', 5],['d', 1],['c'],['c'],['CF'],['c'],['d', 3.8],['c'],['CF'],['s',0.7],['a',3],['s',1],['d',1],['s',0.3],['c'],['CF'],['d',1],['c'],['CF'],['w',0.5],['a',6],['w',0.7],['a',3.5],['s',0.1],['c'],['CF'],['a',2],['s',0.2],['c'],['CF'],['m',1])
+                        aSequence = (['w', 5],['d', 1],['c'],['c'],['CF'],['c'],['d', 3.8],['c'],['CF'],['s',0.7],['a',3],['s',1],['d',1],['s',0.3],['c'],['CF'],['d',1],['c'],['CF'],['m',1])
                     elif rNN == 1:
                         aSequence = (['a',1.5],['s',1.5],['a',5.3],['c'],['CF'],['s',0.1],['c'],['CF'],['s',0.7],['a',4],['w',1.4],['a',1],['c'],['CF'],['a',3.5],['c'],['CF'],['a',2],['c'],
-                                     ['a',2.3],['w',3.2],['c'],['a',5],['c'],['c'],['CF'],['a',4],['c'],['c'],['CF'],['m',1])
+                                     ['a',2.3],['w',3.2],['c'],['a',5],['sa',0.2],['c'],['c'],['CF'],['a',4],['ds',0.3],['c'],['c'],['CF'],['m',1])
                     elif rNN == 2:
                         aSequence = (['a',1],['s',0.5],['d',1.5],['w',2],['d',2],['s',2],['d',0.5],['c'],['CF'],['d',1.5],['c'],['CF'],['d',1.5],['w',0.5],['c'],['CF'],['a',1],['c'],['w',5],['a',1],['s',0.1],['c'],['CF'],['w',1.5],['c'],['CF'],['a',3],['w',1.7],['a',2.5],['m',1])
                     elif rNN == 3:
-                        aSequence = (['w',3.7],['d',1],['c'],['d',3],['c'],['CF'],['d',2],['c'],['CF'],['a',6],['w',3],['a',0.5],['s',1],['c'],['c'],['c'],['c'],['c'],['c'],['c'],['CF'],['w',1.5],['d',3.5],['w',1],['a',1],['w',2],['d',1],['s',0.5],['c'],['c'],['c'],['c'],['c'],['c'],['c'],['CF'],['m',1])
+                        aSequence = (['w',3.7],['d',1],['c'],['d',3],['c'],['CF'],['d',2],['c'],['CF'],['a',6],['w',4],['a',0.5],['s',0.5],['c'],['c'],['c'],['c'],['c'],['c'],['c'],['CF'],['w',1.5],['d',3.5],['w',1],['a',1],['w',3],['d',1],['s',0.5],['c'],['c'],['c'],['c'],['c'],['c'],['c'],['CF'],['m',1])
                     cfg.action(aSequence)
                     if DEBUG == 2:
                         return 1
-            elif rN == 6: # 丹鼎司
+            elif rN == 6: # 绥园
+                for rNN in range (node,2):
+                    _clickTransmitPoint(2,rN,rNN)
+                    if DEBUG == 1:
+                        return 1
+                    if rNN == 0:
+                        aSequence = (['s', 3],['sa',0.6],['c'],['CF'],['c'],['wd',0.7],['c'],['CF'],['m',1])
+                    elif rNN == 1:
+                        aSequence = (['w',2],['aw',0.5],['dw',0.5],['w',2.3],['c'],['CF'],['d',2.6],['c'],['CF'],['a',0.5],['s',0.5],['c'],['CF'],['m',1])
+                    cfg.action(aSequence)
+                    if DEBUG == 2:
+                        return 1
+            elif rN == 7: # 丹鼎司
                 for rNN in range (node,6):
                     _clickTransmitPoint(2,rN,rNN)
                     if DEBUG == 1:
@@ -284,7 +296,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                     cfg.action(aSequence)
                     if DEBUG == 2:
                         return 1
-            elif rN == 7: # 鳞渊境
+            elif rN == 8: # 鳞渊境
                 for rNN in range (node,5):
                     _clickTransmitPoint(2,rN,rNN)
                     if DEBUG == 1:
@@ -318,7 +330,7 @@ if __name__ == '__main__':
     if DEBUG == 2:
         pa.screenshot("data/fightMarker.png",region=(cfg.nMC['fightMarker'][0],cfg.nMC['fightMarker'][1],cfg.nMC['fightMarker'][2],cfg.nMC['fightMarker'][3])) #截取Enter部分，以便确认是否战斗状态
     #0开始
-    selectRegion(2, 6, 5) # Debug哪个区域直接在这里修改
+    selectRegion(2, 6, 1) # Debug哪个区域直接在这里修改
     
     #aSequence = (['w',10],)
     #cfg.action(aSequence)
