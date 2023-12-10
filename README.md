@@ -42,8 +42,9 @@
 
 其他我没有，未尝试，哈哈哈哈
 ***
-下载ZIP并解压
-一切设置完毕后，即可使用**管理员权限**(pyautogui非管理员无法进行)运行`starRail.py`，推荐VScode + code runner插件运行
+下载ZIP并解压，
+一切设置完毕后，即可使用**管理员权限**(pyautogui非管理员无法进行)运行`starRail.py`，推荐VSCode + code runner插件运行
+**重要：如果是VSCode运行，需要在VSCODE按下Ctrl+,(逗号)，打开VSCode设置页面，搜索python.terminal.executeInFileDir，然后打上勾**，该选项是指定运行python时，运行目录为文件目录，而不是打开目录
 
 ## 文件说明 & 授人以渔
 ***
