@@ -28,7 +28,8 @@
 
 `pip install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple`
 ***
-设置星穹铁道为**1920*1080窗口化**(已不强制需求)，其他分辨率请在`configuration.py`中，修改![修改分辨率](data/README/resolution.png)
+设置星穹铁道为1920*1080窗口化(已不强制需求)，其他分辨率请在`configuration.py`中修改_variableParameters中的‘_resolution’字段的值，若系统缩放非100%，也请在此处修改'scale'字段的值
+![修改分辨率，系统缩放](data/README/resolution.png)
 
 带队人物选择最好是下面的**推荐角色**，角色置于***非* 基座舱段**的其他位置，**保持在可操作界面**，脚本运行期间，队伍战斗最好别失败，若失败则该区域后续基本无法进行，只能等待脚本运行到下一区域继续
 |推荐选择|不推荐选择|
@@ -50,6 +51,10 @@
 ## 文件说明 & 授人以渔
 ***
 >星穹铁道1.5版本
+
+**需要修改的参数中增加了缩放字段**
+* `configuration.py`:
+    * _variableParameters中增加了scale字段，用于适配系统缩放不是100%时的情况
 
 **跟随1.5版本更新**
 * `configuration.py`:

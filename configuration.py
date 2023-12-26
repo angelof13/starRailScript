@@ -6,7 +6,8 @@ import win32gui as w32
 
 # 需要修改的参数
 _variableParameters={
-    '_resolution':[1920,1080], # 分辨率
+    '_resolution':[1920,1080], # 分辨率,尽量选择[1920,1200], [1920,1080], [1600,1200], [1600,900], [1440,900], [1366,768], [1360,768], [1280,720]中的一个
+    'scale':100, # 系统缩放，windows设置>系统>屏幕中查看，仅支持100，125，150，200
     'loadingTime':8, # 加载等待时间，即点击传送后到角色进入地图的等待时间
     'startBigMap':0, # 从那个地图开始扫荡
     'startRegion':0, # 从该地图的第几个区域开始扫荡
@@ -20,7 +21,7 @@ vP = _variableParameters
 #不可修改的一些数据，抽象出来仅为匹配分辨率
 _nonModifiableCoordiates={
     'subSign':[630,1020], # 缩放地图需要点击的坐标
-    'fightMarker':[120,993,30,15], # 查找战斗结束的坐标及区域
+    'fightMarker':[0,0,20,10], # 查找战斗结束的坐标及区域,判定区域在_correct中的i == "fightMarker"分支处修改
     'interstellarChart':[1600,180], # 星际航线的坐标
     'gap':100,
 
@@ -97,18 +98,22 @@ def getStarTrain():
     def _correct():
         #计算比例
         _ratio=[round(vP["_resolution"][0]/1920,2),round(vP["_resolution"][1]/1080,2)]
-        resolution  = ([1920,1440], [1920,1200], [1920,1080], [1600,1200], [1600,900], [1440,900], [1440,1050], [1366,768], [1360,768], [1280,720])
-        fightMarker = ([100,1315],  [100,1100],  [120,993], [80,1102],   [80,832],   [72,833],   [68,968],    [65,715],   [65,715],   [60,672])
+        resolution  = ( [1920,1200],[1920,1080],[1600,1200],[1600,900], [1440,900], [1366,768], [1360,768], [1280,720])
+        fightMarker = (([93,1106],  [93,998],   [79,1108],  [79,838],   [72,838],   [68,719],   [68,719],   [65,675]),  # 100%系统缩放下的战斗区域检测
+                       ([94,1113],  [94,1005],  [80,1115],  [80,845],   [73,845],   [69,726],   [69,726],   [65,682]),  # 125%系统缩放下的战斗区域检测
+                       ([97,1120],  [97,1012],  [83,1122],  [83,852],   [76,852],   [71,733],   [71,733],   [67,690]),  # 150%系统缩放下的战斗区域检测
+                       ([98,1133],  [98,1025],  [84,1135],  [84,865],   [77,865],   [73,746],   [73,746],   [69,703]))  # 200%系统缩放下的战斗区域检测)
         #修正不可修改的一些数据
         for i in nMC:
             if i == "gap": # 每个区域间的坐标差值，基准100
                 nMC[i] *= _ratio[1]
             elif i == "fightMarker":
                 resCorrect = False
+                selectScale = 0 if vP['scale'] == 100 else 1 if vP['scale'] == 125 else 2 if vP['scale'] == 150 else 3
                 for resI in range(0,len(resolution)):
                     if vP['_resolution'][0] == resolution[resI][0] and vP['_resolution'][1] == resolution[resI][1]:
-                        nMC[i][0] = fightMarker[resI][0] + _baseCoordinate[0]
-                        nMC[i][1] = fightMarker[resI][1] + _baseCoordinate[1]
+                        nMC[i][0] = fightMarker[selectScale][resI][0] + _baseCoordinate[0]
+                        nMC[i][1] = fightMarker[selectScale][resI][1] + _baseCoordinate[1]
                         resCorrect = True
                         break
                 if resCorrect == False:
