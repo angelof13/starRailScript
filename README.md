@@ -22,23 +22,79 @@
 
 `pip install pyautogui -i https://pypi.tuna.tsinghua.edu.cn/simple`
 
-`pip install pydirectinput -i https://pypi.tuna.tsinghua.edu.cn/simple`
+`pip install pydirectinput -i https://pypi.tuna.tsinghua.edu.cn/simple` 
 
-`pip install pywin32 -i https://pypi.tuna.tsinghua.edu.cn/simple`
+`pip install pywin32 -i https://pypi.tuna.tsinghua.edu.cn/simple` 
 
 `pip install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple`
 ***
-设置星穹铁道为**1920*1080窗口化**(已不强制需求)，其他分辨率请在`configuration.py`中，修改![修改分辨率](data/README/resolution.png)
-带队人物选择**娜塔莎**，角色置于***非* 基座舱段**的其他位置，**保持在可操作界面**，脚本运行期间，队伍战斗最好别失败，若失败则该区域后续基本无法进行，只能等待脚本运行到下一区域继续
+设置星穹铁道为1920*1080窗口化(已不强制需求)，其他分辨率请在`configuration.py`中修改_variableParameters中的‘_resolution’字段的值，若系统缩放非100%，也请在此处修改'scale'字段的值
+![修改分辨率，系统缩放](data/README/resolution.png)
 
+带队人物选择最好是下面的**推荐角色**，角色置于***非* 基座舱段**的其他位置，**保持在可操作界面**，脚本运行期间，队伍战斗最好别失败，若失败则该区域后续基本无法进行，只能等待脚本运行到下一区域继续
+|推荐选择|不推荐选择|
+|:---:|:---:|
+|娜塔莎|布洛妮娅|
+|佩拉|艾丝妲|
+|符玄|三月七|
+|青雀|彦卿|
+|克拉拉||
+|驭空||
+
+其他我没有，未尝试，哈哈哈哈
 ***
-一且完毕后，即可使用**管理员权限**(pyautogui非管理员无法进行)运行`starRail.py`，推荐VScode + code runner插件运行
+下载ZIP并解压，
+一切设置完毕后，即可使用**管理员权限**(pyautogui非管理员无法进行)运行`starRail.py`，推荐VSCode + code runner插件运行
+
+>**重要：如果是VSCode运行，需要在VSCODE按下Ctrl+,(逗号)，打开VSCode设置页面，搜索python.terminal.executeInFileDir，然后打上勾**，该选项是指定运行python时，运行目录为文件目录，而不是打开目录
 
 ## 文件说明 & 授人以渔
 ***
+>星穹铁道1.5版本
+
+**需要修改的参数中增加了缩放字段**
+* `configuration.py`:
+    * _variableParameters中增加了scale字段，用于适配系统缩放不是100%时的情况
+
+**跟随1.5版本更新**
+* `configuration.py`:
+    * 修正了仙舟区域的数量
+    * 增加绥园的区域内传送坐标
+    * 修改了**工造司第二次**传送的坐标
+* `pathFinding.py`:
+    * 修改了**工造司第一次**的行动，删除了后续的无效操作(增加偃偶之形，饮月突破材料时就应该修改了，当时懒了)，以及工造司第二次的行动进行了一些微调
+    * 增加了绥园的两次行动逻辑
+
+
+
+***
+>星穹铁道1.4版本
+
+**测试了一些其他远程人物对该脚本的贴合程度**
+* `pathFinding.py`：
+    * 修改了残响回廊的行动BUG
+    * 修改了太卜司第三个传送的行动逻辑
+* `configuration.py`:
+    * 修改了1920*1080的战斗判断区域
+
+**跟随1.4版本更新**
+朋友，输得一塌糊涂啊！静流都出来了，青雀才来了一只，我的青雀才3命，就差一个就有不求人了，青雀什么时候才能满命啊，くそgame！
+* `starRail.py`:
+    * 修复了一个小BUG，（当脚本运行初始区域region不为0时，后续大地图也从设置的region开始，已修复，修复后，后续大地图会从第一个战斗区域开始）
+* `pathFinding.py`：
+    * 已增加旧武器实验场，造物之柱（直接返回）
+    * 因增加额外突破材料本，大矿区的怪物有些许变动，已更新行为逻辑
+* `configuration.py`:
+    * 修正雅利洛Ⅵ号的区域数量
+    * 修改了常见分辨率的战斗检测的判断区域
+    * action增加了‘caps’键（即大写键），游戏中的作用为调整视角为角色朝向
+
+
+
+***
 >星穹铁道1.3版本
 
-跟随1.3版本更新
+**跟随1.3版本更新**
 米桑，你怎么这么爱在地图中间加地图，很有趣嘛:D
 * `starRail.py`:
     * 鉴于亲爱的米桑就是喜欢在几个地图中间加地图，增加了DEBUG的判断，用于只去点击区域地图，而不进行区域内操作
@@ -56,7 +112,7 @@
 ***
 >星穹铁道1.2版本
 
-跟随1.2版本更新
+**跟随1.2版本更新**
 * `starRail.py`:
     * 修复`仙舟`因增加区域而导致的选择区域的位置错误问题
     * 将`selectRegion()`的调用从`clickRegion()`方法中上提到了`script()`中

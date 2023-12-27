@@ -6,31 +6,55 @@ import win32gui as w32
 
 # 需要修改的参数
 _variableParameters={
-    '_resolution':[1920,1080], # 分辨率
+    '_resolution':[1920,1080], # 分辨率,尽量选择[1920,1200], [1920,1080], [1600,1200], [1600,900], [1440,900], [1366,768], [1360,768], [1280,720]中的一个
+    'scale':100, # 系统缩放，windows设置>系统>屏幕中查看，仅支持100，125，150，200
     'loadingTime':8, # 加载等待时间，即点击传送后到角色进入地图的等待时间
     'startBigMap':0, # 从那个地图开始扫荡
     'startRegion':0, # 从该地图的第几个区域开始扫荡
 
     # 模拟宇宙，cosmic分支暂未完成，未合并到main分支,暂为无效参数
-    'cosmicNum':6, # 世界几:1-6
-    'preference':4 # [存护/0，记忆/1，虚无/2，丰饶/3，寻猎/4，毁灭/5，欢愉/6]
+    'cosmicNum':8, # 世界几:1-8
+    'preference':2, # 祝福选择：[存护/0，记忆/1，虚无/2，丰饶/3，寻猎/4，毁灭/5，欢愉/6，繁育/7，智识/8]
+    'cosmicTimes':34 # 进行几次模拟宇宙的运行，34次即可拿到每周最大奖励
 }
 vP = _variableParameters
 
 #不可修改的一些数据，抽象出来仅为匹配分辨率
 _nonModifiableCoordiates={
     'subSign':[630,1020], # 缩放地图需要点击的坐标
-    'fightMarker':[100,1004,30,15], # 查找战斗结束的坐标及区域
+    'fightMarker':[0,0,20,10], # 查找战斗结束的坐标及区域,判定区域在_correct中的i == "fightMarker"分支处修改
     'interstellarChart':[1600,180], # 星际航线的坐标
     'gap':100,
 
     'select':[900,795], # 多个传送点在一起，二次选择的坐标
-    'transmit':[1650,1000] # 传送按键的坐标
+    'transmit':[1650,1000], # 传送按键的坐标
 }
 nMC=_nonModifiableCoordiates
 
+#模拟宇宙不可修改的一些数据，抽象出来仅为匹配分辨率，cosmic分支暂未完成
+__nonModifiableCoordiatesCosimic={
+    'HeiTaOffice':[440,935], # 黑塔办公室的坐标
+
+    'choiceWord':[1270,610], # 点击世界坐标
+    'choiceRoleAndStart':[1750,1000], # 下载初始角色和启动模拟宇宙坐标
+    'closeAlert':[1170,710], # 等级不达标的提示确认
+    'choiceDestinyBase':[285,600], # 选择命途的基准坐标
+    'choiceDestinyGap':225, # 选择命途两个命途间的间隔
+    'determineDestiny':[960,1020], # 确认命途
+    'choiceStartBlessing':[400,620,1100,30], # 一开始选择祝福
+    
+    'choiceBlessing':[500,773,1400,20], # 局内选择祝福
+    'refresh':[1280,1020], # 刷新祝福
+    'firstBlessing':[533,773], # 第一个祝福
+    'determine':[1690,1020], # 确认祝福
+
+}
+nMCC=__nonModifiableCoordiatesCosimic
+
 # 窗口的坐标
 _baseCoordinate=[0,0,0,0]
+# 调整比例
+_ratio=[1,1]
 
 #大地图
 # 坐标都是相对坐标，基于窗口最左上角
@@ -42,11 +66,11 @@ bigMap=([350,600], # 黑塔空间站
 # 选择大地图内区域的基准坐标
 # 第一个为游戏地图中右边第3个区域的坐标，区域点击基准坐标
 bigMapRegionStart=([1520,465],
-                   [1520,585], # 雅利洛VI，当身处残响回廊后，打开地图会默认展示后面的区域，变化后的基准坐标
-                   [1520,780]) # 仙舟，当身处太卜司后，打开地图会默认展示后面的区域，变化后的基准坐标
+                   [1520,385], # 雅利洛VI，当身处残响回廊后，打开地图会默认展示后面的区域，变化后的基准坐标
+                   [1520,680]) # 仙舟，当身处太卜司后，打开地图会默认展示后面的区域，变化后的基准坐标
 
 # 大地图内可战斗的区域数量，非准确数量，值为从第一个可战斗区域到最后一个可战斗区域之间的差值
-bigMapRegionNum=(3,9,8)
+bigMapRegionNum=(3,11,9)
 
 # 区域内的传送点坐标
 regionPoint=(
@@ -59,8 +83,10 @@ regionPoint=(
         [1120,600], # 城郊雪原 
         [[775,765],[780,340],[810,420]], # 边缘通路 
         [0,0], # 禁卫铁区 
-        [[980,260],[735,880],[735,800],[705,810]], # 残响回廊 
+        [[980,260],[735,880],[735,800],[705,810],[772,635]], # 残响回廊 
         [[525,755],[780,700]], # 永冬岭 
+        [0,0], # 造物之柱 
+        [0,0], # 旧武器实验场 
         [0,0], # 磐岩镇 
         [[740,920],[740,840],[775,720],[770,620]], # 大矿区 
         [[820,770],[810,365]], # 铆钉镇 
@@ -71,8 +97,9 @@ regionPoint=(
         [[1040,330],[665,545],[650,705]], # 迴星港 
         [0,0], # 长乐天
         [0,0], # 金人巷
-        [[450,220],[540,440],[540,180],[570,800]], # 太卜司 
-        [[560,230],[660,400],[960,300],[815,205]], # 工造司
+        [[450,220],[540,440],[1125,725],[558,800]], # 太卜司 
+        [[560,230],[663,710],[960,300],[815,205]], # 工造司
+        [[410,535],[415,490]], # 绥园
         [[610,185],[650,830],[640,500],[640,390],[940,220],[690,930]], # 丹鼎司
         [[1315,570],[340,585],[735,515],[660,585],[865,585]] # 鳞渊境
     ))
@@ -93,17 +120,32 @@ def getStarTrain():
     # 根据设置窗口分辨率缩放相应坐标，并根据获取到的窗口基准位置修改坐标
     def _correct():
         #计算比例
-        _ratio=[round(vP["_resolution"][0]/1920,2),round(vP["_resolution"][1]/1080,2)]
+        _ratio[0]=round(vP["_resolution"][0]/1920,2)
+        _ratio[1]=round(vP["_resolution"][1]/1080,2)
+        resolution  = ( [1920,1200],[1920,1080],[1600,1200],[1600,900], [1440,900], [1366,768], [1360,768], [1280,720])
+        fightMarker = (([93,1106],  [93,998],   [79,1108],  [79,838],   [72,838],   [68,719],   [68,719],   [65,675]),  # 100%系统缩放下的战斗区域检测
+                       ([94,1113],  [94,1005],  [80,1115],  [80,845],   [73,845],   [69,726],   [69,726],   [65,682]),  # 125%系统缩放下的战斗区域检测
+                       ([97,1120],  [97,1012],  [83,1122],  [83,852],   [76,852],   [71,733],   [71,733],   [67,690]),  # 150%系统缩放下的战斗区域检测
+                       ([98,1133],  [98,1025],  [84,1135],  [84,865],   [77,865],   [73,746],   [73,746],   [69,703]))  # 200%系统缩放下的战斗区域检测)
         #修正不可修改的一些数据
         for i in nMC:
             if i == "gap": # 每个区域间的坐标差值，基准100
                 nMC[i] *= _ratio[1]
             elif i == "fightMarker":
-                bias = [2 if _ratio[0]<1 else -2 if _ratio[0]!=1 else 0, 2 if _ratio[1]<1 else -2 if _ratio[1]!=1 else 0]
-                nMC[i][0] = int(nMC[i][0]* _ratio[0] + bias[0] + _baseCoordinate[0])
-                nMC[i][1] = int(nMC[i][1]* _ratio[1] + bias[1] + _baseCoordinate[1])
-                nMC[i][2] = int(nMC[i][2]* _ratio[0])+1
-                nMC[i][3] = int(nMC[i][3]* _ratio[1])+1
+                resCorrect = False
+                selectScale = 0 if vP['scale'] == 100 else 1 if vP['scale'] == 125 else 2 if vP['scale'] == 150 else 3
+                for resI in range(0,len(resolution)):
+                    if vP['_resolution'][0] == resolution[resI][0] and vP['_resolution'][1] == resolution[resI][1]:
+                        nMC[i][0] = fightMarker[selectScale][resI][0] + _baseCoordinate[0]
+                        nMC[i][1] = fightMarker[selectScale][resI][1] + _baseCoordinate[1]
+                        resCorrect = True
+                        break
+                if resCorrect == False:
+                    bias = [2 if _ratio[0]<1 else -2 if _ratio[0]!=1 else 0, 2 if _ratio[1]<1 else -2 if _ratio[1]!=1 else 0]
+                    nMC[i][0] = int(nMC[i][0]* _ratio[0] + bias[0] + _baseCoordinate[0])
+                    nMC[i][1] = int(nMC[i][1]* _ratio[1] + bias[1] + _baseCoordinate[1])
+                    nMC[i][2] = int(nMC[i][2]* _ratio[0])+1
+                    nMC[i][3] = int(nMC[i][3]* _ratio[1])+1
             else:
                 nMC[i][0] = int(nMC[i][0]* _ratio[0] + _baseCoordinate[0])
                 nMC[i][1] = int(nMC[i][1]* _ratio[1] + _baseCoordinate[1])
@@ -127,6 +169,25 @@ def getStarTrain():
                 else:
                     regionPoint[i][j][0] = int(regionPoint[i][j][0] * _ratio[0] + _baseCoordinate[0])
                     regionPoint[i][j][1] = int(regionPoint[i][j][1] * _ratio[1] + _baseCoordinate[1])
+        
+        #修正模拟宇宙的坐标
+        for i in nMCC:
+            if i == "choiceDestinyGap":
+                nMCC[i] *= _ratio[1]
+            elif i == "choiceStartBlessing":
+                nMCC[i][0] = int(nMCC[i][0]* _ratio[0] + _baseCoordinate[0])
+                nMCC[i][1] = int(nMCC[i][1]* _ratio[1] + _baseCoordinate[1])
+                nMCC[i][2] = int(nMCC[i][2]* _ratio[0])+1
+                nMCC[i][3] = int(nMCC[i][3]* _ratio[1])+1
+            elif i == "choiceBlessing":
+                nMCC[i][0] = int(nMCC[i][0]* _ratio[0] + _baseCoordinate[0])
+                nMCC[i][1] = int(nMCC[i][1]* _ratio[1] + _baseCoordinate[1])
+                nMCC[i][2] = int(nMCC[i][2]* _ratio[0])+1
+                nMCC[i][3] = int(nMCC[i][3]* _ratio[1])+1
+            else:
+                nMCC[i][0] = int(nMCC[i][0]* _ratio[0] + _baseCoordinate[0])
+                nMCC[i][1] = int(nMCC[i][1]* _ratio[1] + _baseCoordinate[1])
+
     #调用坐标修正
     _correct()
     return 1
@@ -147,7 +208,7 @@ def action(actionSequence: tuple):
             if aIL == 1:
                 pa.click()
             else:
-                pa.click(x=actionI[1][0]+_baseCoordinate[0],y=actionI[1][1]+_baseCoordinate[1])
+                pa.click(x=actionI[1][0]*_ratio[0]+_baseCoordinate[0],y=actionI[1][1]*_ratio[1]+_baseCoordinate[1])
             time.sleep(1)
         elif actionI[0] == 'cf' or actionI[0] == 'CF': #检测战斗是否结束
 
@@ -182,6 +243,12 @@ def action(actionSequence: tuple):
             time.sleep(1)
             pa.press(actionI[0])
             time.sleep(actionI[1])
+        elif actionI[0] == 'caps' or actionI[0] == 'Caps': #旋转视角，将视角调整为人物朝向，会连续按两次，保证大写键的原装
+            time.sleep(1)
+            pa.press('capslock')
+            time.sleep(0.2)
+            pa.press('capslock')
+            time.sleep(0.5)
         else: #其他按键操作，基本为'w''a''s''d'的组合，默认奔跑，需要走路时，在操作列表增加一位，例如['s',3,1]
 
             # 行动 key: 行动按键; sec: 行动时长; walkFlag: 是否走路，默认False，既奔跑状态
@@ -202,3 +269,12 @@ def action(actionSequence: tuple):
                 _run(actionI[0], actionI[1], True)
 
     time.sleep(1)
+
+if __name__ == "__main__":
+    if 0 == getStarTrain():
+        print("Not Found Game Window")
+        exit()
+    time.sleep(2)
+    pa.screenshot("data/cosmic/temp.png",region=(440,925,20,20)) #截取Enter部分，以便确认是否战斗状态
+    
+    print("End Script")
