@@ -44,11 +44,23 @@
 其他我没有，未尝试，哈哈哈哈
 ***
 下载ZIP并解压，
-一切设置完毕后，即可使用**管理员权限**(pyautogui非管理员无法进行)运行`starRail.py`，推荐VSCode + code runner插件运行
+一切设置完毕后，即可使用**管理员权限**(pyautogui非管理员无法进行)运行`starRail.py`，推荐VSCode + code runner插件运行，如果是VSCode运行，**在打开文件夹时，一定要打开的是data目录的上一级目录，而不是starRailScript_main的上一级目录，(即打开的文件夹是starRailScript_main)**
 
 >**重要：如果是VSCode运行，需要在VSCODE按下Ctrl+,(逗号)，打开VSCode设置页面，搜索python.terminal.executeInFileDir，然后打上勾**，该选项是指定运行python时，运行目录为文件目录，而不是打开目录
 
 ## 文件说明 & 授人以渔
+***
+>星穹铁道1.6版本
+
+**跟随1.6版本更新**
+* `configuration.py`:
+    * 修正了黑塔空间站区域的数量
+    * 增加禁闭舱段的区域内传送坐标
+* `pathFinding.py`:
+    * 增加了禁闭舱段的两次行动逻辑
+
+
+
 ***
 >星穹铁道1.5版本
 

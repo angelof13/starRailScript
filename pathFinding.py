@@ -9,6 +9,7 @@ DEBUG = 0
 # bigMapN: 大地图的序列 黑塔:0, 雅利洛:1, 仙舟:2 
 # regionN: 地图内地区序列，从0开始，但不是游戏内的第一个区域，而是第一个有怪的区域，如bigMapN=0,regionN=0，既为黑塔空间站的基座舱段 
 # _node: 方便DeBug，有多个节点时，测试第几个节点
+######   selectRegion函数主体仅有三个if判断   #########
 def selectRegion(bigMapN: int, regionN: int, _node:int=0):
     # 点击地图传送 
     # bigMapN:      大地图的序列 黑塔:0, 雅利洛:1, 仙舟:2 
@@ -73,6 +74,19 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                     cfg.action(aSequence)
                     if DEBUG == 2:
                         return 1
+            elif rN == 3: # 禁闭舱段
+                for rNN in range (node,2):
+                    _clickTransmitPoint(0,rN,rNN)
+                    if DEBUG == 1:
+                        return 1
+                    if rNN == 0:
+                        aSequence = (['sd', 2.6], ['wd', 1.9],['c'],['ds',1],['sa',1.3],['sd',1],['caps'],['c'],['wd',5],['caps'],['c'],['w',3],['c'],['CF'],['w',2],['c'],['CF'], ['m',1])
+                    elif rNN == 1:
+                        aSequence = (['d', 2],['wd',1],['sd',0.4],['caps'],['w',4.6],['d',0.6],['w',2.8],['wd',1.6],['c'],['CF'],['wd',2.8],['d',1.2],['wd',1],['c'],['CF'],['m',1])
+                    cfg.action(aSequence)
+                    if DEBUG == 2:
+                        return 1
+######### if 0 == bigMapN 分支的执行主体：
         _region0(regionN, _node)
 
     elif 1 == bigMapN:
@@ -181,6 +195,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                 aSequence = (['ds',0.8],['c'],['CF'],['as',2.8],['sd',2.3],['c'],['sd',2.5],['sa',1],['c'],['CF'],['dw',1],['aw',2.5],['as',4],['c'],['as',12],['w',0.3],['a',0.5],['c'],['c'],['c'],['CF'],['c'],['d',2],['sd',1.3],['c'],['CF'],
                              ['wd',1.5],['c'],['CF'],['m',1])
                 cfg.action(aSequence)
+######### elif 1 == bigMapN 分支的执行主体：
         _region1(regionN, _node)
     
     elif 2 == bigMapN:
@@ -315,6 +330,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                     cfg.action(aSequence)
                     if DEBUG == 2:
                         return 1
+######### elif 2 == bigMapN 分支的执行主体：
         _region2(regionN, _node)
 
 
@@ -327,10 +343,10 @@ if __name__ == '__main__':
     if 0 == cfg.getStarTrain():
         print("Not found game Window")
         exit()
-    if DEBUG == 2:
+    if DEBUG == 3:
         pa.screenshot("data/fightMarker.png",region=(cfg.nMC['fightMarker'][0],cfg.nMC['fightMarker'][1],cfg.nMC['fightMarker'][2],cfg.nMC['fightMarker'][3])) #截取Enter部分，以便确认是否战斗状态
     #0开始
-    selectRegion(2, 6, 1) # Debug哪个区域直接在这里修改
+    selectRegion(0, 3, 1) # Debug哪个区域直接在这里修改
     
     #aSequence = (['w',10],)
     #cfg.action(aSequence)
