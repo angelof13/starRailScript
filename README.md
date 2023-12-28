@@ -52,6 +52,10 @@
 ***
 >星穹铁道1.6版本
 
+**增强兼容**
+* `configuration.py`:
+    * 增加对不同版本pyautogui返回的兼容，消除ImageNotFoundException错误
+
 **跟随1.6版本更新**
 * `configuration.py`:
     * 修正了黑塔空间站区域的数量
