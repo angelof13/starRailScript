@@ -13,13 +13,24 @@ def clickBigMap(mapN:int):
     time.sleep(2)
     pa.click(x=cfg.nMC['interstellarChart'][0],y=cfg.nMC['interstellarChart'][1])
     time.sleep(2)
+    
+    def randomClick(times:int): # 此界面需要随机点击几次，才能正常点击
+        for i in range(2):
+            time.sleep((random.randint(1,11)/10))
+            pa.mouseDown()
+            time.sleep((random.randint(1,5)/10))
+            pa.mouseUp()
+    
+    randomClick(2)
+    pa.mouseDown(x=cfg.bigMap[0][0],y=cfg.bigMap[0][1])
+    time.sleep(0.5)
+    pa.moveRel(800,0,1)
+    pa.mouseUp()
+    time.sleep(1)
+    
     pa.moveTo(x=cfg.bigMap[mapN][0],y=cfg.bigMap[mapN][1])
     time.sleep(1)
-    for i in range(5):  
-        time.sleep((random.randint(1,11)/10))
-        pa.mouseDown()
-        time.sleep((random.randint(1,5)/10))
-        pa.mouseUp()
+    randomClick(2)
 
 moveFlag:int=0
 # 选择大地图内的可战斗区域
@@ -27,7 +38,7 @@ moveFlag:int=0
 # regionN: 地图内地区序列，从0开始，但不是游戏内的第一个区域，而是第一个有怪的区域，如bigMapN=0,regionN=0，既为黑塔空间站的基座舱段 
 def clickRegion(bigMapN:int,regionN:int):
     time.sleep(2)
-    def move(rel:int):
+    def move(rel:int): # 移动选择区域，正数往下拉，负数往上拉
         global moveFlag
         if moveFlag == 0:
                 pa.mouseDown(x=cfg.bigMapRegionStart[0][0],y=cfg.bigMapRegionStart[0][1])
