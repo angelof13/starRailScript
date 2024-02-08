@@ -17,48 +17,52 @@ _variableParameters={
     'preference':4 # [存护/0，记忆/1，虚无/2，丰饶/3，寻猎/4，毁灭/5，欢愉/6]
 }
 vP = _variableParameters
+'''需要修改的参数'''
 
 #不可修改的一些数据，抽象出来仅为匹配分辨率
 _nonModifiableCoordiates={
     'subSign':[630,1020], # 缩放地图需要点击的坐标
     'fightMarker':[0,0,20,10], # 查找战斗结束的坐标及区域,判定区域在_correct中的i == "fightMarker"分支处修改
-    'interstellarChart':[1600,180], # 星际航线的坐标
+    'interstellarChart':[1760,160], # 星际航线的坐标
     'gap':100,
 
     'select':[900,795], # 多个传送点在一起，二次选择的坐标
     'transmit':[1650,1000] # 传送按键的坐标
 }
 nMC=_nonModifiableCoordiates
+'''不可修改的一些数据'''
 
-# 窗口的坐标
-_baseCoordinate=[0,0,0,0]
+_baseCoordinate=[0,0,0,0] 
+'''窗口的基准坐标'''
 
-#大地图
-# 坐标都是相对坐标，基于窗口最左上角
-# 大地图的点击坐标
-bigMap=([500,600],  # 黑塔空间站
-        [945,420],  # 雅利洛-Ⅵ
-        [1290,820], # 仙舟⌜罗浮⌟
-        [1700,440]) # 皮诺康尼
+bigMap=([440,600],  # 黑塔空间站
+        [885,420],  # 雅利洛-Ⅵ
+        [1230,820], # 仙舟⌜罗浮⌟
+        [1640,440]) # 匹诺康尼
+'''大地图，坐标都是相对坐标，基于窗口最左上角，大地图的点击坐标，0:黑塔空间站，1:雅利洛，2:仙州，3:匹诺康尼'''
 
-# 选择大地图内区域的基准坐标
-# 第一个为游戏地图中右边第3个区域的坐标，区域点击基准坐标
 bigMapRegionStart=([1520,465],
                    [1520,385], # 雅利洛VI，当身处残响回廊后，打开地图会默认展示后面的区域，变化后的基准坐标
-                   [1520,680]) # 仙舟，当身处太卜司后，打开地图会默认展示后面的区域，变化后的基准坐标
+                   [1520,680], # 仙舟，当身处太卜司后，打开地图会默认展示后面的区域，变化后的基准坐标
+                   [1520,670]) # 匹诺康尼因为分为梦境和现实，大概率以后现实也会有战斗区域，此为梦境的第二区域的坐标
+"""选择大地图内区域的基准坐标\n
+0：游戏地图中第3个区域的坐标,区域点击基准坐标\n
+1：雅利洛VI,当身处残响回廊后,打开地图会默认展示后面的区域,变化后的基准坐标\n
+2：仙舟,当身处太卜司后,打开地图会默认展示后面的区域,变化后的基准坐标\n
+3：匹诺康尼因为分为梦境和现实,大概率以后现实也会有战斗区域,此为梦境的第二区域的坐标"""
 
 # 大地图内可战斗的区域数量，非准确数量，值为从第一个可战斗区域到最后一个可战斗区域之间的差值
-bigMapRegionNum=(4,11,9)
+bigMapRegionNum=(4,11,9,3)
 
 # 区域内的传送点坐标
 regionPoint=(
-    (
+    ( # 黑塔空间站
         [840,200], # 基座舱段
         [[1010,600],[925,670],[540,600]], # 收容舱段
         [[335,620],[610,445]], # 支援舱段
         [[747,820],[890,425]] # 禁闭舱段
     ),
-    (
+    ( # 雅利洛-Ⅵ
         [1120,600], # 城郊雪原 
         [[775,765],[780,340],[810,420]], # 边缘通路 
         [0,0], # 禁卫铁区 
@@ -71,7 +75,7 @@ regionPoint=(
         [[820,770],[810,365]], # 铆钉镇 
         [510,690] # 机械聚落
     ),
-    (
+    ( # 仙舟⌜罗浮⌟
         [[910,185],[750,725],[750,690],[785,660]], # 流云渡 
         [[1040,330],[665,545],[650,705]], # 迴星港 
         [0,0], # 长乐天
@@ -81,10 +85,15 @@ regionPoint=(
         [[410,535],[415,490]], # 绥园
         [[610,185],[650,830],[640,500],[640,390],[940,220],[690,930]], # 丹鼎司
         [[1315,570],[340,585],[735,515],[660,585],[865,585]] # 鳞渊境
+    ),
+    ( # 皮诺康尼
+        [[1170,224],[435,870],[325,530],[475,155]], # 筑梦边境
+        [[820,440],[820,632],[780,725],[780,510]], # 稚子的梦
+        #[]  # 白日梦酒店(梦境)
     ))
 
-# 找到星穹铁道的窗口,并选中
 def getStarTrain():
+    '''找到星穹铁道的窗口，并调到前台聚焦'''
     startTrain = w32.FindWindow('UnityWndClass',u'崩坏：星穹铁道')
     if startTrain == 0:
         return 0
@@ -95,9 +104,9 @@ def getStarTrain():
     _baseCoordinate = w32.GetWindowRect(startTrain)
     print(_baseCoordinate)
     print("correct coordinates")
-    
-    # 根据设置窗口分辨率缩放相应坐标，并根据获取到的窗口基准位置修改坐标
+
     def _correct():
+        '''根据设置窗口分辨率缩放相应坐标，并根据获取到的窗口基准位置修改坐标'''
         #计算比例
         _ratio=[round(vP["_resolution"][0]/1920,2),round(vP["_resolution"][1]/1080,2)]
         resolution  = ( [1920,1200],[1920,1080],[1600,1200],[1600,900], [1440,900], [1366,768], [1360,768], [1280,720])
@@ -151,9 +160,17 @@ def getStarTrain():
     _correct()
     return 1
 
-# 地图内操作解析
-# actionSequence: 需要执行的一系列行动的序列
+
 def action(actionSequence: tuple):
+    '''地图内操作解析
+    actionSequence: 需要执行的一系列行动的序列，不区分大小写\n
+    其中C为左键,平A,有第二个参数(形如[c,[100,100]]),即为点击某个相对位置，\n
+    'CF'为检测战斗是否结束,有第二个参数即为检测间隔,默认2s一次\n
+    'QM'为退出3d小房间的操作
+    'SP'为等待一段时间，必须有第二参数，为等待时长，秒
+    'W''A''S''D'的组合,第二参数为运行时长,第三参数为是否行走,默认奔跑\n
+    'X','Y'分别为移动横向纵向视角,非精准操作,慎用\n
+    其他按键只能为单一按键,必须有第二参数,第二参数为操作后等待时间'''
     print(actionSequence)
     for actionI in actionSequence:
         print(actionI)
@@ -171,8 +188,9 @@ def action(actionSequence: tuple):
             time.sleep(1)
         elif actionI[0] == 'cf' or actionI[0] == 'CF': #检测战斗是否结束
 
-            # 检测战斗是否结束 interval: 间隔几秒检查一次，默认是2秒
             def _checkFightEnd(interval:int=2):
+                '''检测战斗是否结束
+                interval: 间隔几秒检查一次，默认是2秒'''
                 for i in range(2,5): #检测是否进入战斗，尝试以2s,3s,4s的间隔检查三次
                     time.sleep(i)
                     try:
@@ -201,24 +219,25 @@ def action(actionSequence: tuple):
                 _checkFightEnd()
             else:
                 _checkFightEnd(actionI[1])
-        elif actionI[0] == 'f' or actionI[0] == 'F': #按F，进入画卷，模拟宇宙对话
-            time.sleep(1)
-            pa.press(actionI[0])
-            time.sleep(actionI[1])
-        elif actionI[0] == 'm' or actionI[0] == 'M': #打开地图
-            time.sleep(1)
-            pa.press(actionI[0])
-            time.sleep(actionI[1])
         elif actionI[0] == 'caps' or actionI[0] == 'Caps': #旋转视角，将视角调整为人物朝向，会连续按两次，保证大写键的原装
             time.sleep(1)
             pa.press('capslock')
             time.sleep(0.2)
             pa.press('capslock')
             time.sleep(0.5)
-        else: #其他按键操作，基本为'w''a''s''d'的组合，默认奔跑，需要走路时，在操作列表增加一位，例如['s',3,1]
+        elif actionI[0] == 'qm' or actionI[0] == 'QM': #退出匹诺康尼的3D小房间地图
+            time.sleep(2)
+            pa.click(x=nMC['interstellarChart'][0],y=nMC['interstellarChart'][1])
+            time.sleep(2)
+        elif actionI[0] == 'sp' or actionI[0] == 'SP': #等待，第二个参数为等待时间
+            time.sleep(actionI[1])
+        elif actionI[0][0] == 'w' or actionI[0][0] == 'W' or actionI[0][0] == 'a' or actionI[0][0] == 'A' or actionI[0][0] == 's' or actionI[0][0] == 'S' or actionI[0][0] == 'd' or actionI[0][0] == 'D': #'w''a''s''d'的组合，默认奔跑，需要走路时，在操作列表增加一位，例如['s',3,1]
 
             # 行动 key: 行动按键; sec: 行动时长; walkFlag: 是否走路，默认False，既奔跑状态
             def _run(key, sec: float, walkFlag:bool = False):
+                '''行动 key: 行动按键; 
+                sec: 行动时长; 
+                walkFlag: 是否走路，默认False，既奔跑状态'''
                 time.sleep(0.1)
                 for keyI in key:
                     pa.keyDown(keyI)
@@ -233,5 +252,9 @@ def action(actionSequence: tuple):
                 _run(actionI[0], actionI[1])
             else:
                 _run(actionI[0], actionI[1], True)
+        else: #其他按键，必须有第二参数，第二个参数为等待时间
+            time.sleep(1)
+            pa.press(actionI[0])
+            time.sleep(actionI[1])
 
     time.sleep(1)

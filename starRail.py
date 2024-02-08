@@ -3,14 +3,15 @@ from configuration import time, pa
 from pathFinding import selectRegion
 import random
 
-# 0：非DEBUG
-# 1：只执行到点击区域的操作
 DEBUG = 0
+'''0:非DEBUG， 1:只执行到点击区域的操作'''
 
-# 选择大地图
-# MapN: 大地图的序列 黑塔:0, 雅利洛:1, 仙舟:2 
 def clickBigMap(mapN:int):
+    '''选择大地图
+    MapN: 大地图的序列 黑塔:0, 雅利洛:1, 仙舟:2， 匹诺康尼:3 '''
     time.sleep(2)
+    pa.click(x=cfg.nMC['interstellarChart'][0],y=cfg.nMC['interstellarChart'][1]) # 防止在匹诺康尼的小房间里，点击两次
+    time.sleep(1)
     pa.click(x=cfg.nMC['interstellarChart'][0],y=cfg.nMC['interstellarChart'][1])
     time.sleep(2)
     
@@ -33,10 +34,10 @@ def clickBigMap(mapN:int):
     randomClick(2)
 
 moveFlag:int=0
-# 选择大地图内的可战斗区域
-# bigMapN: 大地图的序列 黑塔:0, 雅利洛:1, 仙舟:2 
-# regionN: 地图内地区序列，从0开始，但不是游戏内的第一个区域，而是第一个有怪的区域，如bigMapN=0,regionN=0，既为黑塔空间站的基座舱段 
 def clickRegion(bigMapN:int,regionN:int):
+    '''选择大地图内的可战斗区域
+    bigMapN: 大地图的序列 黑塔:0, 雅利洛:1, 仙舟:2 
+    regionN: 地图内地区序列,从0开始,但不是游戏内的第一个区域,而是第一个有怪的区域,如bigMapN=0,regionN=0，既为黑塔空间站的基座舱段 '''
     time.sleep(2)
     def move(rel:int): # 移动选择区域，正数往下拉，负数往上拉
         global moveFlag
@@ -63,6 +64,8 @@ def clickRegion(bigMapN:int,regionN:int):
         else:
             move(-500)
             pa.click(x=cfg.bigMapRegionStart[2][0],y=cfg.bigMapRegionStart[2][1]+(regionN-5)*cfg.nMC['gap'])
+    elif bigMapN == 3: # 皮诺康尼
+        pa.click(x=cfg.bigMapRegionStart[3][0],y=cfg.bigMapRegionStart[3][1]+regionN*cfg.nMC['gap'])
     time.sleep(1)
 
     
@@ -70,14 +73,19 @@ def clickRegion(bigMapN:int,regionN:int):
 def script():
     time.sleep(0.1)
     pa.press('m') # 打开地图
-    time.sleep(1)
-    pa.click(cfg.nMC['subSign'][0],cfg.nMC['subSign'][1],clicks=10,interval=0.3) # 点击缩放地图，保证传送点的位置正确
-    time.sleep(1)
     global moveFlag
-    for i in range(cfg.vP['startBigMap'],3): # 三个大体图
+    subSignFlag=0
+    for i in range(cfg.vP['startBigMap'],4): # 四个大体图
         print("bigMapNum=",i)
         moveFlag = 0
         clickBigMap(i) # 点击大地图
+
+        if 0 == subSignFlag:
+            time.sleep(1)
+            pa.click(cfg.nMC['subSign'][0],cfg.nMC['subSign'][1],clicks=10,interval=0.3) # 点击缩放地图，保证传送点的位置正确
+            time.sleep(1)
+            subSignFlag = 1
+
         startRegion = cfg.vP['startRegion']
         for j in range(startRegion,cfg.bigMapRegionNum[i]): # 大地图中的区域选择 
             print("regionNum=",j)
@@ -90,8 +98,9 @@ def script():
 
 
 # 脚本开始
-# 需要选择人物为 娜塔莎 ，并且在非基座舱段的其他场地，并且在可操作界面
+# 需要选择人物最好为推荐角色 ，在非基座舱段的其他场地，并且在可操作界面
 if __name__ == '__main__':
+    DEBUG=0
     print("Select Window")
     if 0 == cfg.getStarTrain():
         print("Not Found Game Window")
