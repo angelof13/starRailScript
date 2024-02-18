@@ -365,7 +365,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                 if rNN == 0:
                     aSequence = (['w', 0.8],['d', 1.8],['dw', 1.4],['c'],['CF'],['m',1])
                 elif rNN == 1:
-                    aSequence = (['s', 0.1],['caps'],['w',1],['sp',2],['w',3],['sp',2],['w',0.4],['d',3.9],['w',0.8],['c'],['CF'],['a',1],['w',0.8],['a',3.5],['c'],['CF'],['m',1],['qm']) # 可能有遇怪后视角变动的bug，
+                    aSequence = (['s', 0.1],['caps'],['w',1],['sp',2],['w',3],['sp',2],['w',0.4],['d',3.9],['w',0.8],['c'],['CF'],['w',1],['a',0.8],['w',3.5],['c'],['CF'],['c'],['CF'],['m',1],['qm']) # 可能有遇怪后视角变动的bug，
                 elif rNN == 2:
                     aSequence = (['s',3],['c'],['CF'],['d',3],['s',0.5],['d',4],['c'],['CF'],['m',1])
                 elif rNN == 3:
@@ -379,7 +379,7 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                 if DEBUG == 1:
                     return 1
                 if rNN == 0:
-                    aSequence = (['s',1],['m',1])
+                    aSequence = (['w',0.3,1],['d',2,1],['f',8],['w',3],['c'],['CF'],['w',2],['c'],['CF'],['m',1])
                 cfg.action(aSequence)
                 if DEBUG == 2:
                     return 1
@@ -404,7 +404,7 @@ if __name__ == '__main__':
     if DEBUG == 3:
         pa.screenshot("data/fightMarker.png",region=(cfg.nMC['fightMarker'][0],cfg.nMC['fightMarker'][1],cfg.nMC['fightMarker'][2],cfg.nMC['fightMarker'][3])) #截取Enter部分，以便确认是否战斗状态
     #0开始
-    selectRegion(3, 0, 3) # Debug哪个区域直接在这里修改
+    selectRegion(3, 2, 0) # Debug哪个区域直接在这里修改
     
     #aSequence = (['w',10],)
     #cfg.action(aSequence)
