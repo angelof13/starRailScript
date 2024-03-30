@@ -65,7 +65,13 @@ def clickRegion(bigMapN:int,regionN:int):
             move(-500)
             pa.click(x=cfg.bigMapRegionStart[2][0],y=cfg.bigMapRegionStart[2][1]+(regionN-5)*cfg.nMC['gap'])
     elif bigMapN == 3: # 皮诺康尼
-        pa.click(x=cfg.bigMapRegionStart[3][0],y=cfg.bigMapRegionStart[3][1]+regionN*cfg.nMC['gap'])
+        if regionN < 2:
+            move(500)
+            pa.click(x=cfg.bigMapRegionStart[3][0],y=cfg.bigMapRegionStart[3][1]+regionN*cfg.nMC['gap'])
+        else:
+            move(-500)
+            pa.click(x=cfg.bigMapRegionStart[3][0],y=cfg.bigMapRegionStart[3][1]+(regionN-1)*cfg.nMC['gap'])
+
     time.sleep(1)
 
     

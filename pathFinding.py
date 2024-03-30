@@ -383,12 +383,12 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                 if rNN == 0:
                     aSequence = (['w',0.35,1],['d',1.9,1],['f',8],['w',2],['c'],['CF'],['w',2],['c'],['CF'],['c'],['CF'],['m',1])
                 elif rNN == 1:
-                    aSequence = (['w',2],['a',1],['c'],['a',7.5],['w',2.2],['c'],['CF'],['aw',3],['c'],['CF'],['m',1])
+                    aSequence = (['w',2],['a',1],['c'],['a',7.5],['w',2.2],['c'],['CF'],['w',3],['c'],['CF'],['m',1])
                 elif rNN == 2:
-                    aSequence = (['w',2],['a',12],['sp',2],['a',4],['sp',2],['a',1.8],['f',3],['w',2.8,1],['c'],['CF'],['a',3.3],['c'],['CF'],['c'],['CF'],['w',1],['r',2],['w',0.3],['wa',0.5],['as',1],['c'],['CF'],['m',1],['qm'])
+                    aSequence = (['w',2],['a',12],['sp',2],['a',4],['sp',2],['a',1.8],['f',3],['w',2.8,1],['c'],['CF'],['s',0.2],['a',3.3],['c'],['CF'],['c'],['CF'],['aw',1.1],['a',0.2],['r',2],['a',0.5],['as',1],['c'],['CF'],['m',1],['qm'])
                 elif rNN == 3: # 梦境大堂
-                    aSequence = (['w',0.35,1],['d',1.9,1],['f',8],['w',6.2],['d',2],['c'],['CF'],['d',1.3],['s',1.8],['d',0.9],['s',4],['c'],['s',4],['f',8],['w',4.3],['a',5],['f',8],['w',1.8],['a',2.5],['w',1.5],['d',1],['s',1],['f',3],['w',4.5],['d',2],['w',0.2,1],
-                                 ['r',2],['d',1.1],['s',3.3],['d',1],['c'],['CF'],['s',0.1],['c'],['CF'],['s',1],['d',1],['s',0.5],['d',1],['w',0.4],['d',1.5],['s',1],['d',1],['r',2],['s',0.5],['d',1],['s',1],['d',2],['ds',1],['c'],['CF'],['m',1])
+                    aSequence = (['w',0.35,1],['d',1.9,1],['f',8],['w',6.2],['d',2.8,1],['c'],['CF'],['d',1.3],['s',1.8],['d',0.9],['s',4.5],['c'],['s',3.5],['f',8],['w',4.3],['a',5],['f',8],['w',1.8],['a',2.5],['w',1.5],['d',1],['s',1],['f',3],['w',4.5],['d',2],['w',0.2,1],
+                                 ['r',2],['d',1.1],['s',3.3],['d',1],['c'],['CF'],['s',0.1],['c'],['CF'],['s',1],['d',1],['s',0.5],['d',1],['w',0.4],['d',1.5],['s',1],['d',1],['r',2],['s',0.5],['d',1],['s',0.5],['d',2],['ds',1],['c'],['CF'],['m',1],['qm'])
                 elif rNN == 4:
                     aSequence = (['a',1.5],['w',4],['c'],['CF'],['m',1])
                 elif rNN == 5:
@@ -399,6 +399,34 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
                     aSequence = (['d',1],['w',1.4],['wd',1.5],['c'],['d',4.4],['s',5.6],['c'],['CF'],['w',0.5],['c'],['CF'],['m',1])
                 elif rNN == 8: # 监控室
                     aSequence = (['s',4.2],['f',8],['w',1.1],['d',2],['w',3.2],['f',3],['d',0.5,1],['w',2.3],['a',5.8],['r',2],['a',1],['s',1.5],['c'],['CF'],['s',1.8,1],['a',2],['r',2],['a',6.5],['f',3],['a',1.5],['r',2],['a',0.9],['w',1.5],['d',2.4],['r',2],['d',3],['w',1],['c'],['CF'],['m',1],['qm'])
+                cfg.action(aSequence)
+                if DEBUG == 2:
+                    return 1
+        elif rN == 3: # 朝露公官
+            for rNN in range (node,4):
+                _clickTransmitPoint(bigMapN,rN,rNN)
+                if DEBUG == 1:
+                    return 1
+                if rNN == 0: # 梦主大厅
+                    aSequence = (['w', 1],['f', 8],['w', 2],['d',1],['w',3],['d',1.5],['c'],['CF'],['d',1],['w',5],['aw',2],['sp',1],['c'],['CF'],['m',1],['qm'])
+                elif rNN == 1:
+                    aSequence = (['s', 0.1],['caps'],['w',1],['sp',2],['w',3],['sp',2],['w',0.4],['d',3.9],['w',0.8],['c'],['CF'],['w',1],['a',0.8],['w',2],['a',0.2],['w',1],['c'],['CF'],['c'],['CF'],['m',1],['qm']) # 可能有遇怪后视角变动的bug，
+                elif rNN == 2:
+                    aSequence = (['s',3],['c'],['CF'],['d',3],['s',0.5],['d',4],['c'],['CF'],['m',1])
+                elif rNN == 3:
+                    aSequence = (['s',0.6,1],['a',1],['sp',2],['a',3],['sp',2],['a',1],['s',2],['a',1],['f',2],['s',0.5],['a',2],['r',2],['a',2],['w',1.3],['c'],['CF'],['m',1],['qm'])
+                cfg.action(aSequence)
+                if DEBUG == 2:
+                    return 1
+        elif rN == 4: # 克劳克影视乐园
+            for rNN in range (node,4):
+                _clickTransmitPoint(bigMapN,rN,rNN)
+                if DEBUG == 1:
+                    return 1
+                if rNN == 0:
+                    aSequence = (['w', 0.8],['d', 1.8],['dw', 1.4],['c'],['CF'],['m',1])
+                elif rNN == 1:
+                    aSequence = (['s', 0.1],['caps'],['w',1],['sp',2],['w',3],['sp',2],['w',0.4],['d',3.9],['w',0.8],['c'],['CF'],['w',1],['a',0.8],['w',2],['a',0.2],['w',1],['c'],['CF'],['c'],['CF'],['m',1],['qm']) # 可能有遇怪后视角变动的bug，
                 cfg.action(aSequence)
                 if DEBUG == 2:
                     return 1
@@ -416,14 +444,14 @@ def selectRegion(bigMapN: int, regionN: int, _node:int=0):
 
 #该文件的main函数为区域内Debug使用
 if __name__ == '__main__':
-    DEBUG=1
+    DEBUG=2
     if 0 == cfg.getStarTrain():
         print("Not found game Window")
         exit()
     if DEBUG == 3:
         pa.screenshot("data/fightMarker.png",region=(cfg.nMC['fightMarker'][0],cfg.nMC['fightMarker'][1],cfg.nMC['fightMarker'][2],cfg.nMC['fightMarker'][3])) #截取Enter部分，以便确认是否战斗状态
     #0开始
-    selectRegion(3, 2, 3) # Debug哪个区域直接在这里修改
+    selectRegion(3, 3, 0) # Debug哪个区域直接在这里修改
     
     #aSequence = (['w',10],)
     #cfg.action(aSequence)
